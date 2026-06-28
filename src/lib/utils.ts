@@ -42,6 +42,33 @@ export function getRelatedTags(posts: CollectionEntry<'blog'>[], tag: string, li
         .map(([t]) => t)
 }
 
+/**
+ * Posts to recommend at the end of an article: same category first, then by shared-tag
+ * overlap, with recency as the final tiebreaker so the block always fills even when a
+ * post has no category/tag siblings. Excludes the current post.
+ */
+export function getRelatedPosts(
+    posts: CollectionEntry<'blog'>[],
+    current: CollectionEntry<'blog'>,
+    limit = 3,
+): CollectionEntry<'blog'>[] {
+    const currentCategory = getCategorySlug(current.data.category)
+    const currentTags = new Set(current.data.tags || [])
+    return posts
+        .filter((p) => p.id !== current.id)
+        .map((post) => {
+            const sameCategory = getCategorySlug(post.data.category) === currentCategory
+            const sharedTags = (post.data.tags || []).filter((t) => currentTags.has(t)).length
+            return { post, score: (sameCategory ? 1000 : 0) + sharedTags }
+        })
+        .sort(
+            (a, b) =>
+                b.score - a.score || b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf(),
+        )
+        .slice(0, limit)
+        .map((x) => x.post)
+}
+
 import { categories } from '../data/categories'
 
 export function getCategorySlug(categoryName: string): string {
