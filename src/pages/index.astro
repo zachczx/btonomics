@@ -33,136 +33,154 @@ categories.forEach((cat) => {
 
 const formatDate = (date: Date) => dayjs(date).fromNow()
 
+// Running "ledger" of honest tallies — picked at build time.
 const allStats = [
-    '💡 Taobao light bulbs bought: 48 | Used so far: 6',
-    '📱 "Sorry to disturb" messages to ID: ∞',
-    "🔍 Defects at handover: 23 | Defects we've accumulated since: 2000+",
-    '🧸 Floor space remaining after a kid: 15%',
-    '🏠 2018: minimalist dream | 2026: toy minefield',
-    '🛒 Hours on Taobao at 2am: too many',
+    '48 Taobao bulbs bought · 6 used',
+    '23 defects at handover · 2000+ since',
+    '∞ "sorry to disturb" texts to our ID',
+    '2018 minimalist dream → 2026 toy minefield',
+    '6 months reno · 47 arguments · 1 home',
+    'Hours on Taobao at 2am: too many',
 ]
 const shuffled = [...allStats].sort(() => Math.random() - 0.5)
 const displayStats = shuffled.slice(0, 3)
+
+const catTints = [
+    'group-hover:border-primary',
+    'group-hover:border-secondary',
+    'group-hover:border-info',
+    'group-hover:border-warning',
+    'group-hover:border-accent',
+    'group-hover:border-success',
+]
 ---
 
-<Layout title="Home">
-    <div slot="hero" class="bg-base-200/50 py-12 md:py-16">
-        <div class="container mx-auto px-4">
-            <div class="mx-auto grid max-w-5xl grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
-                <a
-                    href={`/renovation/our-clean-bto-home-design`}
-                    class="group block rotate-1 transition-all duration-500 hover:scale-105"
+<Layout title="Home" fullBleed>
+    <!-- ============ HERO: thesis ============ -->
+    <section class="bg-base-200 relative overflow-hidden">
+        <div
+            class="container mx-auto grid items-center gap-12 px-4 py-16 md:py-24 lg:grid-cols-[1.05fr_0.95fr]"
+        >
+            <div>
+                <p class="eyebrow text-secondary mb-5 text-xs">The honest HDB renovation log</p>
+                <h1
+                    class="text-base-content font-serif text-5xl leading-[1.04] font-black md:text-6xl"
                 >
-                    <div class="bg-white p-6 shadow-md transition-shadow duration-500">
-                        <div class="bg-base-200 mb-6 aspect-4/3 overflow-hidden">
-                            <Image
-                                src={headerImage1}
-                                alt="The start"
-                                width={960}
-                                height={720}
-                                class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
-                                loading="eager"
-                            />
-                        </div>
-                        <div class="text-center">
-                            <h2
-                                class="text-base-content group-hover:text-primary mb-1 text-3xl font-bold transition-colors"
-                            >
-                                The Vision
-                            </h2>
-                            <p class="text-base-content/70 text-sm leading-relaxed italic">
-                                When we still thought "minor delays" meant days
-                            </p>
-                        </div>
-                    </div>
-                </a>
-
-                <a
-                    href={`/renovation/our-clean-bto-home-design`}
-                    class="group block transition-all duration-500 hover:scale-105"
-                >
-                    <div class="-rotate-1 bg-white p-6 shadow-md transition-shadow duration-500">
-                        <div class="bg-base-200 mb-6 aspect-4/3 overflow-hidden">
-                            <Image
-                                src={headerImage2}
-                                alt="The end"
-                                width={960}
-                                height={720}
-                                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                loading="eager"
-                            />
-                        </div>
-                        <div class="text-center">
-                            <h2
-                                class="text-base-content group-hover:text-primary mb-1 text-3xl font-bold transition-colors"
-                            >
-                                The Reality
-                            </h2>
-                            <p class="text-base-content/70 text-sm leading-relaxed italic">
-                                6 months, 47 arguments, and one beautiful home later
-                            </p>
-                        </div>
-                    </div>
-                </a>
+                    We renovated our HDB on a budget —<span class="text-primary">
+                        and kept every receipt.</span
+                    >
+                </h1>
+                <p class="text-base-content/75 mt-6 max-w-xl text-lg leading-relaxed">
+                    The wins, the regrets, and exactly what each one cost. So your first home turns
+                    out a little better than ours did.
+                </p>
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a href="/blog" class="btn btn-primary rounded-full px-6">Read the latest</a>
+                    <a
+                        href="/renovation/our-clean-bto-home-design"
+                        class="btn btn-outline border-base-content/20 rounded-full px-6">See our home</a
+                    >
+                </div>
             </div>
 
-            <div
-                class="mx-auto mt-12 flex max-w-4xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm"
-            >
-                {
-                    displayStats.map((stat, i) => (
-                        <>
-                            <span class="text-base-content/60">{stat}</span>
-                            {i < displayStats.length - 1 && (
-                                <span class="text-base-content/30 hidden sm:inline">•</span>
-                            )}
-                        </>
-                    ))
-                }
+            <!-- Vision / Reality before-after -->
+            <div class="relative mx-auto w-full max-w-md">
+                <figure class="bg-base-100 relative z-10 rotate-1 p-3 shadow-xl">
+                    <div class="bg-base-200 aspect-4/3 overflow-hidden">
+                        <Image
+                            src={headerImage2}
+                            alt="Our finished living and dining room"
+                            width={720}
+                            height={540}
+                            class="h-full w-full object-cover"
+                            loading="eager"
+                        />
+                    </div>
+                    <figcaption class="mt-2 flex items-center justify-between px-1">
+                        <span class="eyebrow text-secondary text-[0.6rem]">After · The Reality</span>
+                        <span class="ledger text-base-content/40 text-xs">2018</span>
+                    </figcaption>
+                </figure>
+                <figure
+                    class="bg-base-100 absolute -top-8 -left-6 z-0 hidden w-40 -rotate-3 p-2 shadow-lg sm:block lg:-left-10 lg:w-48"
+                >
+                    <div class="bg-base-200 aspect-4/3 overflow-hidden">
+                        <Image
+                            src={headerImage1}
+                            alt="The original 3D design concept"
+                            width={240}
+                            height={180}
+                            class="h-full w-full object-cover grayscale"
+                            loading="eager"
+                        />
+                    </div>
+                    <figcaption class="eyebrow text-base-content/45 mt-1 text-center text-[0.5rem]">
+                        Before · The plan
+                    </figcaption>
+                </figure>
             </div>
+        </div>
+    </section>
+
+    <!-- ============ LEDGER STRIP ============ -->
+    <div class="bg-forest text-forest-content">
+        <div
+            class="container mx-auto flex flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 py-4"
+        >
+            {
+                displayStats.map((stat, i) => (
+                    <>
+                        <span class="ledger text-forest-content/85 text-xs tracking-tight">
+                            {stat}
+                        </span>
+                        {i < displayStats.length - 1 && (
+                            <span class="text-secondary hidden text-xs sm:inline">✦</span>
+                        )}
+                    </>
+                ))
+            }
         </div>
     </div>
 
-    <main class="bg-base-200/30 space-y-20 py-12 md:py-16">
-        {
-            (regretPost || worthItPost) && (
-                <section class="container mx-auto px-4">
-                    <h2 class="text-base-content mb-8 text-center text-3xl font-bold md:text-4xl">
-                        The Honest Truth
-                    </h2>
+    <!-- ============ THE HONEST TRUTH (Win / Fail) ============ -->
+    {
+        (regretPost || worthItPost) && (
+            <section class="bg-base-100 py-16 md:py-20">
+                <div class="container mx-auto px-4">
+                    <div class="mb-10 text-center">
+                        <p class="eyebrow text-secondary mb-3 text-xs">Receipts don't lie</p>
+                        <h2 class="text-base-content font-serif text-3xl font-bold md:text-4xl">
+                            The Honest Truth
+                        </h2>
+                    </div>
 
-                    <div class="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
+                    <div class="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
                         {regretPost && (
                             <a
                                 href={`/${regretPost.data.category}/${regretPost.data.slug}`}
-                                class="group block rotate-1 transition-all duration-500 hover:scale-105 hover:rotate-0"
+                                class="group block"
                             >
-                                <div class="bg-white p-5 shadow-md transition-shadow duration-500 hover:shadow-lg">
-                                    <div class="bg-base-200 mb-4 aspect-video overflow-hidden">
-                                        {regretPost.data.image && (
+                                <div class="border-error/30 bg-base-100 hover:border-error overflow-hidden rounded-lg border-2 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                    <div class="bg-error text-error-content eyebrow flex items-center gap-2 px-4 py-2.5 text-xs">
+                                        <CryingEmoji /> Fail · we regret this
+                                    </div>
+                                    {regretPost.data.image && (
+                                        <div class="bg-base-200 aspect-video overflow-hidden">
                                             <Image
                                                 src={regretPost.data.image}
                                                 alt={regretPost.data.title}
                                                 width={600}
                                                 height={338}
-                                                class="h-full w-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
+                                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                                             />
-                                        )}
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="mb-2 inline-flex items-center gap-1.5">
-                                            <span class="text-xl">
-                                                <CryingEmoji />
-                                            </span>
-                                            <span class="text-error text-lg font-bold tracking-wide uppercase">
-                                                Fail
-                                            </span>
                                         </div>
-                                        <h3 class="text-base-content group-hover:text-primary mb-1 text-lg font-bold transition-colors">
+                                    )}
+                                    <div class="p-5">
+                                        <h3 class="text-base-content group-hover:text-primary font-serif text-lg font-bold transition-colors">
                                             {regretPost.data.title}
                                         </h3>
-                                        <p class="text-base-content/60 text-sm italic">
-                                            Read the cautionary tale
+                                        <p class="text-base-content/55 mt-1.5 text-sm italic">
+                                            Read the cautionary tale →
                                         </p>
                                     </div>
                                 </div>
@@ -172,11 +190,14 @@ const displayStats = shuffled.slice(0, 3)
                         {worthItPost && (
                             <a
                                 href={`/${worthItPost.data.category}/${worthItPost.data.slug}`}
-                                class="group block -rotate-1 transition-all duration-500 hover:scale-105 hover:rotate-0"
+                                class="group block"
                             >
-                                <div class="bg-white p-5 shadow-md transition-shadow duration-500 hover:shadow-lg">
-                                    <div class="bg-base-200 mb-4 aspect-video overflow-hidden">
-                                        {worthItPost.data.image && (
+                                <div class="border-success/30 bg-base-100 hover:border-success overflow-hidden rounded-lg border-2 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                    <div class="bg-success text-success-content eyebrow flex items-center gap-2 px-4 py-2.5 text-xs">
+                                        <Party /> Win · we'd do it again
+                                    </div>
+                                    {worthItPost.data.image && (
+                                        <div class="bg-base-200 aspect-video overflow-hidden">
                                             <Image
                                                 src={worthItPost.data.image}
                                                 alt={worthItPost.data.title}
@@ -184,44 +205,40 @@ const displayStats = shuffled.slice(0, 3)
                                                 height={338}
                                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                                             />
-                                        )}
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="mb-2 inline-flex items-center gap-1.5">
-                                            <span class="text-xl">
-                                                <Party />
-                                            </span>
-                                            <span class="text-success text-lg font-bold tracking-wide uppercase">
-                                                Win
-                                            </span>
                                         </div>
-                                        <h3 class="text-base-content group-hover:text-primary mb-1 text-lg font-bold transition-colors">
+                                    )}
+                                    <div class="p-5">
+                                        <h3 class="text-base-content group-hover:text-primary font-serif text-lg font-bold transition-colors">
                                             {worthItPost.data.title}
                                         </h3>
-                                        <p class="text-base-content/60 text-sm italic">
-                                            See why we'd do it again
+                                        <p class="text-base-content/55 mt-1.5 text-sm italic">
+                                            See why we'd do it again →
                                         </p>
                                     </div>
                                 </div>
                             </a>
                         )}
                     </div>
-                </section>
-            )
-        }
+                </div>
+            </section>
+        )
+    }
 
-        <section class="container mx-auto px-4">
-            <div class="mb-4 flex items-end justify-between md:mb-8">
+    <!-- ============ LATEST ============ -->
+    <section class="bg-base-200 py-16 md:py-20">
+        <div class="container mx-auto px-4">
+            <div class="mb-8 flex flex-wrap items-end justify-between gap-2">
                 <div>
-                    <h2 class="text-base-content mb-1 text-3xl font-bold md:text-4xl">
+                    <p class="eyebrow text-secondary mb-2 text-xs">Fresh off the to-do list</p>
+                    <h2 class="text-base-content font-serif text-3xl font-bold md:text-4xl">
                         Latest Happenings
                     </h2>
                 </div>
                 <a
                     href="/blog"
-                    class="text-primary hover:text-secondary flex items-center gap-1 text-sm font-bold transition-colors"
+                    class="text-primary hover:text-accent flex items-center gap-1 text-sm font-bold transition-colors"
                 >
-                    See All
+                    See all
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="h-4 w-4"
@@ -236,107 +253,92 @@ const displayStats = shuffled.slice(0, 3)
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {
-                    latestPosts.map((post) => {
-                        return (
-                            <article
-                                class={`group transition-all duration-500 hover:scale-102 hover:rotate-[0.5deg]`}
-                            >
-                                <a href={`/${post.data.category}/${post.data.slug}`} class="block">
-                                    <div class="bg-white p-4 shadow transition-shadow duration-500 hover:shadow-md">
-                                        <div class="bg-base-200 mb-4 aspect-square overflow-hidden">
-                                            {post.data.image && (
-                                                <Image
-                                                    src={post.data.image}
-                                                    alt={post.data.title}
-                                                    width={600}
-                                                    height={600}
-                                                    class="h-full w-full object-cover"
-                                                />
-                                            )}
-                                        </div>
-                                        <div class="mb-2 flex justify-center">
-                                            <span
-                                                class={`btn btn-soft btn-primary btn-sm rounded-full`}
-                                            >
+                    latestPosts.map((post) => (
+                        <article class="group">
+                            <a href={`/${post.data.category}/${post.data.slug}`} class="block">
+                                <div class="bg-base-100 overflow-hidden rounded-lg shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                                    <div class="bg-base-200 aspect-4/3 overflow-hidden">
+                                        {post.data.image && (
+                                            <Image
+                                                src={post.data.image}
+                                                alt={post.data.title}
+                                                width={600}
+                                                height={450}
+                                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                            />
+                                        )}
+                                    </div>
+                                    <div class="p-5">
+                                        <div class="mb-2 flex items-center gap-2">
+                                            <span class="eyebrow text-secondary text-[0.6rem]">
                                                 {post.data.tags?.[0] || 'Post'}
                                             </span>
-                                        </div>
-                                        <div class="text-center">
-                                            <h3 class="group-hover:text-primary mb-2 line-clamp-2 text-lg leading-tight font-bold transition-colors">
-                                                {post.data.title}
-                                            </h3>
-                                            <time class="text-base-content/60 block text-xs">
+                                            <span class="bg-base-300 h-px flex-1" />
+                                            <span class="ledger text-base-content/45 text-[0.7rem]">
                                                 {formatDate(post.data.pubDate)}
-                                            </time>
+                                            </span>
                                         </div>
+                                        <h3 class="text-base-content group-hover:text-primary font-serif text-lg leading-snug font-bold transition-colors">
+                                            {post.data.title}
+                                        </h3>
                                     </div>
-                                </a>
-                            </article>
-                        )
-                    })
+                                </div>
+                            </a>
+                        </article>
+                    ))
                 }
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="bg-base-200/30 py-20">
-            <div class="container mx-auto px-4">
-                <h2 class="text-base-content mb-12 text-center text-4xl font-bold md:text-5xl">
+    <!-- ============ BROWSE BY TOPIC ============ -->
+    <section class="bg-sagetint py-16 md:py-20">
+        <div class="container mx-auto px-4">
+            <div class="mb-10 text-center">
+                <p class="eyebrow text-secondary mb-3 text-xs">Find your rabbit hole</p>
+                <h2 class="text-base-content font-serif text-3xl font-bold md:text-4xl">
                     Browse by Topic
                 </h2>
-
-                <div
-                    class="mx-auto grid max-w-6xl grid-cols-1 gap-8 sm:grid-cols-2 md:gap-10 lg:grid-cols-3"
-                >
-                    {
-                        categories.map((cat, index) => {
-                            const rotations = [
-                                'rotate-1',
-                                '-rotate-1',
-                                'rotate-2',
-                                '-rotate-1',
-                                'rotate-1',
-                                '-rotate-2',
-                            ]
-                            const rotation = rotations[index % rotations.length]
-
-                            return (
-                                <a
-                                    href={`/${cat.slug}`}
-                                    class={`group block ${rotation} transition-all duration-500 hover:scale-105 hover:rotate-0`}
-                                >
-                                    <div class="bg-white p-6 shadow-md transition-shadow duration-500 hover:shadow-lg">
-                                        <div class="bg-base-200/30 group-hover:bg-primary/5 mb-4 flex aspect-square items-center justify-center overflow-hidden transition-colors">
-                                            {cat.icon && (
-                                                <Image
-                                                    src={cat.icon}
-                                                    alt="icon"
-                                                    class={`h-full w-full object-cover`}
-                                                />
-                                            )}
-                                        </div>
-
-                                        <div class="text-center">
-                                            <h3 class="text-base-content group-hover:text-primary mb-2 text-xl font-bold transition-colors">
-                                                {cat.name}
-                                            </h3>
-
-                                            <div class="text-base-content/60 mb-3 text-xs">
-                                                {categoryCounts[cat.slug]} posts
-                                            </div>
-
-                                            <p class="text-base-content/60 line-clamp-2 text-xs leading-relaxed">
-                                                {cat.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </a>
-                            )
-                        })
-                    }
-                </div>
             </div>
-        </section>
-    </main>
+
+            <div class="mx-auto grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {
+                    categories.map((cat, index) => (
+                        <a href={`/${cat.slug}`} class="group block">
+                            <div
+                                class={`flex h-full items-center gap-4 rounded-lg border-2 border-transparent bg-base-100 p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${catTints[index % catTints.length]}`}
+                            >
+                                <div class="bg-base-200 h-20 w-20 shrink-0 overflow-hidden rounded-md">
+                                    {cat.icon && (
+                                        <Image
+                                            src={cat.icon}
+                                            alt=""
+                                            width={160}
+                                            height={160}
+                                            class="h-full w-full object-cover"
+                                        />
+                                    )}
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-baseline gap-2">
+                                        <h3 class="text-base-content group-hover:text-primary font-serif text-lg font-bold transition-colors">
+                                            {cat.name}
+                                        </h3>
+                                        <span class="ledger text-base-content/40 text-xs">
+                                            {categoryCounts[cat.slug]}
+                                        </span>
+                                    </div>
+                                    <p class="text-base-content/60 mt-1 line-clamp-2 text-xs leading-relaxed">
+                                        {cat.description}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    ))
+                }
+            </div>
+        </div>
+    </section>
 </Layout>

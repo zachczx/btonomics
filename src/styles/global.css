@@ -5,58 +5,59 @@
     name: 'hometheme';
     default: true;
 
-    /* --- BRAND COLORS ---
-       Cohesive earthy palette: Sage Green, Terracotta, Warm Neutrals
+    /* --- EARTHY, COMMITTED PALETTE ---
+       Sage + terracotta + warm ink. Win = sage, Fail = terracotta.
     */
 
-    /* Primary: Darkened Sage Green */
-    --color-primary: #6b7e56;
-    --color-primary-content: #ffffff;
+    /* Primary: deepened sage (more contrast / confidence) */
+    --color-primary: #5d7049;
+    --color-primary-content: #f7f4ec;
 
-    /* Secondary: Terracotta */
-    --color-secondary: #d1855c;
-    --color-secondary-content: #2a1710;
+    /* Secondary: terracotta */
+    --color-secondary: #c2603d;
+    --color-secondary-content: #fbf3ee;
 
-    /* Accent: Warm Olive-Gray (instead of cool blue-gray) */
-    --color-accent: #7a6f5d;
-    --color-accent-content: #fdfcfa;
+    /* Accent: deep rust for hover / active */
+    --color-accent: #a8472a;
+    --color-accent-content: #fbf3ee;
 
-    /* Neutral: Warm Dark Gray */
-    --color-neutral: #3a3632;
-    --color-neutral-content: #fdfcfa;
+    /* Neutral: warm ink */
+    --color-neutral: #2c2a24;
+    --color-neutral-content: #f5f1e8;
 
-    /* --- BACKGROUNDS --- */
-    /* Brightened slightly for more airiness */
-    --color-base-100: #fffffe;
-    --color-base-200: #f8f6f3;
-    --color-base-300: #ebe8e3;
+    /* Backgrounds: warm, a touch more saturated so it reads as a choice */
+    --color-base-100: #fffdf8;
+    --color-base-200: #f4efe4;
+    --color-base-300: #e7e0d1;
 
-    /* --- BODY TEXT --- */
-    /* Warm charcoal instead of cool blue-gray */
-    --color-base-content: #3a3632; /* Ratio: 12.5:1 (Passes AAA) */
+    /* Body text: warm ink (high contrast) */
+    --color-base-content: #2c2a24;
 
-    /* --- STATUS COLORS --- */
-
-    /* Info: Muted teal (warmer than original blue) */
+    /* Status — tied to the brand so Win/Fail use real palette */
     --color-info: #5d8a7f;
-    --color-info-content: #fdfcfa;
+    --color-info-content: #fbfaf7;
+    --color-success: #5d7049;
+    --color-success-content: #f7f4ec;
+    --color-warning: #cf9445;
+    --color-warning-content: #2a1f0e;
+    --color-error: #c2603d;
+    --color-error-content: #fbf3ee;
 
-    /* Success: Your sage green (maintains consistency) */
-    --color-success: #6b7e56;
-    --color-success-content: #ffffff;
-
-    /* Warning: Warm amber */
-    --color-warning: #d4a255;
-    --color-warning-content: #251a0e;
-
-    /* Error: Terracotta-adjacent rust */
-    --color-error: #c25a3a;
-    --color-error-content: #fdf5f2;
+    --radius-box: 0.5rem;
+    --radius-field: 0.375rem;
 }
 
 @theme {
     --font-serif: 'Playfair Display Variable', serif;
     --font-body: 'Lora Variable', serif;
+    --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+    /* Signature surfaces (used as section bands) */
+    --color-forest: #2f3a28;
+    --color-forest-content: #eef0e6;
+    --color-sagetint: #e9ede0;
+    --color-cream: #f4efe4;
+    --color-ink: #2c2a24;
 }
 
 @layer base {
@@ -93,13 +94,27 @@
             U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
             U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
+
+    /* space-mono — ledger numerals & labels */
+    @font-face {
+        font-family: 'Space Mono';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(@fontsource/space-mono/files/space-mono-latin-400-normal.woff2) format('woff2');
+    }
+    @font-face {
+        font-family: 'Space Mono';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 700;
+        src: url(@fontsource/space-mono/files/space-mono-latin-700-normal.woff2) format('woff2');
+    }
 }
 
 @layer utilities {
     :root {
-        /* Reserve space for scrollbar to prevent layout jumping */
         scrollbar-gutter: stable;
-        /* Ensure headings land below fixed headers (and inside our IO zone) */
         scroll-padding-top: 100px;
     }
     html {
@@ -115,33 +130,32 @@
     h5,
     h6 {
         font-family: var(--font-serif);
+        line-height: 1.1;
+        letter-spacing: -0.012em;
     }
+}
 
-    h1 {
-        font-size: (--text-4xl);
-        font-weight: 900;
-    }
-    h2 {
-        font-size: (--text-3xl);
-        font-weight: 700;
-    }
-    h3 {
-        font-size: (--text-xl);
-        font-weight: 700;
-    }
+/* --- Signature utilities ------------------------------------------ */
+
+/* Monospace tabular numerals — costs, counts, dates in "ledger" UI */
+@utility ledger {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+/* Mono uppercase micro-label / eyebrow */
+@utility eyebrow {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    line-height: 1;
 }
 
 @utility text-list {
     span:not(:last-of-type)::after {
         content: ', ';
-    }
-}
-
-@utility text-list-dot {
-    span:not(:last-of-type)::after {
-        content: '•';
-        margin-inline-start: 0.5rem;
-        margin-inline-end: 0.5rem;
     }
 }
 

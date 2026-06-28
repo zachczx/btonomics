@@ -1,92 +1,96 @@
-<footer class="border-base-content/10 mt-20 border-t">
-    <div class="mx-auto max-w-7xl px-4 py-12 md:px-8">
-        <!-- Main Footer Content -->
-        <div class="grid gap-8 md:grid-cols-3">
-            <!-- Brand Section -->
-            <div class="space-y-4">
-                <div
-                    class="from-primary via-accent to-primary bg-linear-to-r bg-clip-text text-2xl font-extrabold text-transparent"
-                >
-                    BTOnomics
-                </div>
-                <p class="text-base-content/70 text-sm">
-                    A blog on our journey renovating our HDB home on a budget.
+---
+const year = new Date().getFullYear()
+---
+
+<footer class="bg-forest text-forest-content mt-24">
+    <div class="mx-auto max-w-7xl px-4 py-14 md:px-8">
+        <div class="grid gap-10 md:grid-cols-3">
+            <!-- Brand -->
+            <div class="space-y-3">
+                <div class="font-serif text-2xl font-extrabold">BTOnomics</div>
+                <p class="text-forest-content/70 max-w-xs text-sm">
+                    Honest, slightly-embarrassing lessons from renovating our HDB on a budget.
+                </p>
+                <p class="eyebrow text-forest-content/45 text-[0.6rem]">
+                    Est. 2018 · Bukit Batok · 4-room HDB
                 </p>
             </div>
 
-            <!-- Quick Links -->
-            <div class="space-y-4">
-                <h3 class="text-primary text-lg font-semibold">Quick Links</h3>
+            <!-- Browse -->
+            <div class="space-y-3">
+                <h3 class="eyebrow text-forest-content/55 text-[0.7rem]">Browse</h3>
                 <nav class="flex flex-col space-y-2 text-sm">
-                    <a href="/" class="text-base-content/70 hover:text-accent transition-colors"
+                    <a href="/" class="text-forest-content/75 hover:text-secondary transition-colors"
                         >Home</a
                     >
                     <a
                         href="/honest-reviews"
-                        class="text-base-content/70 hover:text-accent transition-colors"
+                        class="text-forest-content/75 hover:text-secondary transition-colors"
                         >Honest Reviews</a
                     >
                     <a
                         href="/renovation"
-                        class="text-base-content/70 hover:text-accent transition-colors"
+                        class="text-forest-content/75 hover:text-secondary transition-colors"
                         >Renovation</a
                     >
                     <a
                         href="/shopping"
-                        class="text-base-content/70 hover:text-accent transition-colors">Shopping</a
+                        class="text-forest-content/75 hover:text-secondary transition-colors"
+                        >Shopping</a
                     >
                     <a
                         href="/maintenance"
-                        class="text-base-content/70 hover:text-accent transition-colors"
+                        class="text-forest-content/75 hover:text-secondary transition-colors"
                         >Maintenance</a
                     >
                     <a
                         href="/general"
-                        class="text-base-content/70 hover:text-accent transition-colors">General</a
+                        class="text-forest-content/75 hover:text-secondary transition-colors"
+                        >General</a
                     >
                 </nav>
             </div>
 
-            <!-- About Section -->
-            <div class="space-y-4">
-                <h3 class="text-primary text-lg font-semibold">About</h3>
+            <!-- More -->
+            <div class="space-y-3">
+                <h3 class="eyebrow text-forest-content/55 text-[0.7rem]">More</h3>
                 <nav class="flex flex-col space-y-2 text-sm">
                     <a
                         href="/about-us"
-                        class="text-base-content/70 hover:text-accent transition-colors">About Us</a
+                        class="text-forest-content/75 hover:text-secondary transition-colors"
+                        >About Us</a
                     >
                     <a
                         href="/search"
-                        class="text-base-content/70 hover:text-accent transition-colors">Search</a
+                        class="text-forest-content/75 hover:text-secondary transition-colors"
+                        >Search</a
                     >
                 </nav>
             </div>
         </div>
 
-        <div class="via-primary/30 my-8 h-px bg-linear-to-r from-transparent to-transparent"></div>
-
-        <div
-            class="text-base-content/60 flex flex-col items-center justify-between gap-4 text-sm md:flex-row"
-        >
-            <div>
-                © {new Date().getFullYear()} Zixian Chen. All rights reserved.
-            </div>
-            <button
-                onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
-                class="group border-primary/40 bg-primary/10 text-primary hover:border-accent hover:bg-accent/20 hover:text-accent hover:shadow-accent/30 flex items-center gap-1 rounded-full border px-4 py-1.5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-                aria-label="Back to top"
-            >
-                <span>Back to top</span>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 24 24"
-                    class="transition-transform group-hover:-translate-y-1"
+        <div class="border-forest-content/15 mt-12 border-t pt-6">
+            <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
+                <div class="ledger text-forest-content/55 text-xs">
+                    © {year} Zixian Chen · All rights reserved
+                </div>
+                <button
+                    onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+                    class="eyebrow border-forest-content/25 text-forest-content/80 hover:border-secondary hover:text-secondary group flex items-center gap-1.5 rounded-full border px-4 py-2 text-[0.65rem] transition-colors"
+                    aria-label="Back to top"
                 >
-                    <path fill="currentColor" d="m12 10.8l-4.6 4.6L6 14l6-6l6 6l-1.4 1.4z"></path>
-                </svg>
-            </button>
+                    <span>Back to top</span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        class="transition-transform group-hover:-translate-y-1"
+                    >
+                        <path fill="currentColor" d="m12 10.8l-4.6 4.6L6 14l6-6l6 6l-1.4 1.4z"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </footer>

@@ -1,29 +1,82 @@
 ---
 ---
 
-<nav class="navbar z-50 bg-base-100/95 shadow-sm backdrop-blur-sm transition-all duration-300" id="main-navbar">
-    <div class="navbar-start">
-        <div class="dropdown">
-            <div tabindex="0" role="button" class="btn btn-ghost lg:hidden" aria-label="Menu">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+<header
+    class="border-base-300 bg-base-100/90 sticky top-0 z-50 border-b backdrop-blur-md transition-all duration-300"
+    id="main-navbar"
+>
+    <nav
+        class="mx-auto flex max-w-(--breakpoint-2xl) items-center justify-between gap-4 px-4 py-3 md:px-8"
+    >
+        <!-- Brand -->
+        <a href="/" class="flex items-baseline gap-2.5">
+            <span
+                class="text-primary font-serif text-2xl font-extrabold tracking-tight md:text-3xl"
+                >BTOnomics</span
+            >
+            <span class="eyebrow text-base-content/45 hidden text-[0.6rem] sm:inline"
+                >Honest reno receipts</span
+            >
+        </a>
+
+        <!-- Desktop nav -->
+        <div class="hidden items-center gap-1 lg:flex">
+            <a
+                href="/blog"
+                class="text-base-content/80 hover:text-primary rounded-md px-3 py-2 text-sm font-semibold transition-colors"
+                >Blog</a
+            >
+            <a
+                href="/about-us"
+                class="text-base-content/80 hover:text-primary rounded-md px-3 py-2 text-sm font-semibold transition-colors"
+                >About</a
+            >
+            <a
+                href="/search"
+                class="border-base-300 bg-base-200 text-base-content/70 hover:border-primary hover:text-primary ml-1 flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                >
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                Search
+            </a>
+        </div>
+
+        <!-- Mobile -->
+        <div class="dropdown dropdown-end lg:hidden">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-sm" aria-label="Menu">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
             </div>
-            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+            <ul
+                tabindex="0"
+                class="menu menu-sm dropdown-content border-base-300 bg-base-100 rounded-box z-[1] mt-3 w-44 border p-2 shadow-lg"
+            >
                 <li><a href="/blog">Blog</a></li>
                 <li><a href="/search">Search</a></li>
                 <li><a href="/about-us">About</a></li>
             </ul>
         </div>
-        <a href="/" class="btn btn-ghost text-xl md:text-2xl font-extrabold text-primary tracking-tighter">BTOnomics</a>
-        <span class="hidden md:inline-block text-xs md:text-sm font-medium opacity-70 ml-2">Honest lessons from our HDB renovation</span>
-    </div>
-
-    <div class="navbar-end hidden lg:flex">
-        <ul class="menu menu-horizontal px-1 font-bold text-base">
-            <li><a href="/blog" class="hover:text-primary">Blog</a></li>
-            <li><a href="/search" class="hover:text-primary">Search</a></li>
-            <li><a href="/about-us" class="hover:text-primary">About</a></li>
-        </ul>
-    </div>
-</nav>
+    </nav>
+</header>
