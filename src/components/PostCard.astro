@@ -4,8 +4,6 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type { CollectionEntry } from 'astro:content'
 import { getCategorySlug } from '../lib/utils'
-import Party from '~icons/noto/party-popper'
-import CryingEmoji from '~icons/noto/loudly-crying-face'
 
 dayjs.extend(relativeTime)
 
@@ -27,7 +25,7 @@ const href = `/${getCategorySlug(d.category)}/${d.slug || post.id}`
         <div
             class="bg-base-100 border-base-300 overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_38px_-22px_rgba(27,23,20,0.35)]"
         >
-            <div class="bg-base-200 relative aspect-4/3 overflow-hidden">
+            <div class="bg-base-200 aspect-4/3 overflow-hidden">
                 {
                     d.image ? (
                         <Image
@@ -45,30 +43,25 @@ const href = `/${getCategorySlug(d.category)}/${d.slug || post.id}`
                         </div>
                     )
                 }
-                {
-                    d.mood && (
-                        <span
-                            class={`eyebrow absolute top-3 left-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.55rem] shadow-sm ${d.mood === 'positive' ? 'bg-secondary text-secondary-content' : 'bg-error text-error-content'}`}
-                        >
-                            {d.mood === 'positive' ? (
-                                <>
-                                    <Party /> Win
-                                </>
-                            ) : (
-                                <>
-                                    <CryingEmoji /> Fail
-                                </>
-                            )}
-                        </span>
-                    )
-                }
             </div>
             <div class="p-5">
                 <div class="flex items-center gap-2">
-                    <span
-                        class="eyebrow bg-softteal text-secondary rounded-full px-2.5 py-1 text-[0.56rem]"
-                        >{d.tags?.[0] || 'Post'}</span
-                    >
+                    {
+                        d.mood ? (
+                            <span
+                                class={`inline-flex items-center gap-1.5 text-xs font-semibold ${d.mood === 'positive' ? 'text-secondary' : 'text-error'}`}
+                            >
+                                <span
+                                    class={`h-2 w-2 rounded-full ${d.mood === 'positive' ? 'bg-secondary' : 'bg-error'}`}
+                                />
+                                {d.mood === 'positive' ? 'Win' : 'Fail'}
+                            </span>
+                        ) : (
+                            <span class="eyebrow bg-softteal text-secondary rounded-full px-2.5 py-1 text-[0.56rem]">
+                                {d.tags?.[0] || 'Post'}
+                            </span>
+                        )
+                    }
                     <span class="ledger text-ink/45 ml-auto text-xs"
                         >{dayjs(d.pubDate).fromNow()}</span
                     >

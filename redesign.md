@@ -92,7 +92,7 @@ Retired the second, tag-driven "topical" category set (it was typo-ridden — `A
 
 - `src/lib/utils.ts` — `getRelatedPosts()` (same-category → shared-tag overlap → recency fallback).
 - `src/pages/[category]/[id].astro` — "Keep reading" related-posts grid at the end of every post; collapsible mobile TOC (`<details>`, `lg:hidden`); ~200wpm read-time in the byline; breadcrumb shows the category display name.
-- `src/components/PostCard.astro` — Win/Fail corner badge on the image (mood is 100% populated); `data-date`/`-rating`/`-mood` for client sort/filter.
+- `src/components/PostCard.astro` — subtle Win/Fail dot + label in the meta row (teal dot = Win, coral dot = Fail; no emoji, nothing over the photo — an image-overlay pill was tried and rejected as too loud); `data-date`/`-rating`/`-mood` for client sort/filter.
 - `src/components/PostGrid.astro` — **new.** Client-enhanced grid: Newest/Oldest/Highest-rated sort + optional All/Wins/Fails mood filter; re-inits on `astro:page-load` (client-router safe). Used by category listings (sort) and `/verdicts` (sort + filter).
 - `src/pages/verdicts.astro` — **new.** Cross-category hub of every post with a rating/verdict (defaults to highest-rated), with count + avg-rating stat line. Linked from navbar, footer, and the home honest-truth section.
 - `src/components/TableOfContents.astro` — script re-runs on `astro:page-load`, mirrors active state across both TOC copies (mobile + desktop), and scopes heading observation to the prose body.
