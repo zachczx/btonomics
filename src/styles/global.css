@@ -5,59 +5,52 @@
     name: 'hometheme';
     default: true;
 
-    /* --- EARTHY, COMMITTED PALETTE ---
-       Sage + terracotta + warm ink. Win = sage, Fail = terracotta.
+    /* --- BRIGHT, FRIENDLY — BUT OURS ---
+       Warm paper + ink workhorse, with coral / teal / marigold pops.
+       Win = teal, Fail = coral.
     */
+    --color-primary: #ff5a45; /* coral */
+    --color-primary-content: #ffffff;
 
-    /* Primary: deepened sage (more contrast / confidence) */
-    --color-primary: #5d7049;
-    --color-primary-content: #f7f4ec;
+    --color-secondary: #0e9aa0; /* teal */
+    --color-secondary-content: #ffffff;
 
-    /* Secondary: terracotta */
-    --color-secondary: #c2603d;
-    --color-secondary-content: #fbf3ee;
+    --color-accent: #ffb22e; /* marigold */
+    --color-accent-content: #2a1c06;
 
-    /* Accent: deep rust for hover / active */
-    --color-accent: #a8472a;
-    --color-accent-content: #fbf3ee;
+    --color-neutral: #1b1714; /* ink — primary CTAs / strong surfaces */
+    --color-neutral-content: #fff7ee;
 
-    /* Neutral: warm ink */
-    --color-neutral: #2c2a24;
-    --color-neutral-content: #f5f1e8;
+    --color-base-100: #ffffff;
+    --color-base-200: #fff6ec; /* warm paper band */
+    --color-base-300: #ece2d4; /* warm hairline */
+    --color-base-content: #1b1714; /* ink text */
 
-    /* Backgrounds: warm, a touch more saturated so it reads as a choice */
-    --color-base-100: #fffdf8;
-    --color-base-200: #f4efe4;
-    --color-base-300: #e7e0d1;
+    --color-info: #0e9aa0;
+    --color-info-content: #ffffff;
+    --color-success: #0e9aa0; /* WIN = teal */
+    --color-success-content: #ffffff;
+    --color-warning: #ffb22e;
+    --color-warning-content: #2a1c06;
+    --color-error: #ff5a45; /* FAIL = coral */
+    --color-error-content: #ffffff;
 
-    /* Body text: warm ink (high contrast) */
-    --color-base-content: #2c2a24;
-
-    /* Status — tied to the brand so Win/Fail use real palette */
-    --color-info: #5d8a7f;
-    --color-info-content: #fbfaf7;
-    --color-success: #5d7049;
-    --color-success-content: #f7f4ec;
-    --color-warning: #cf9445;
-    --color-warning-content: #2a1f0e;
-    --color-error: #c2603d;
-    --color-error-content: #fbf3ee;
-
-    --radius-box: 0.5rem;
-    --radius-field: 0.375rem;
+    --radius-box: 1.1rem;
+    --radius-field: 0.7rem;
+    --radius-selector: 2rem;
 }
 
 @theme {
-    --font-serif: 'Playfair Display Variable', serif;
-    --font-body: 'Lora Variable', serif;
-    --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
+    --font-heading: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
 
-    /* Signature surfaces (used as section bands) */
-    --color-forest: #2f3a28;
-    --color-forest-content: #eef0e6;
-    --color-sagetint: #e9ede0;
-    --color-cream: #f4efe4;
-    --color-ink: #2c2a24;
+    /* flat tint pops + paper/ink */
+    --color-paper: #fff6ec;
+    --color-ink: #1b1714;
+    --color-softcoral: #ffece8;
+    --color-softteal: #def3f3;
+    --color-softmarigold: #fff1d6;
+    --color-blueprint: #c9b8a3;
 }
 
 @layer base {
@@ -69,46 +62,30 @@
         border-color: var(--color-gray-200, currentColor);
     }
 
-    /* playfair-display-latin-wght-normal */
+    /* bricolage-grotesque — display / headings */
     @font-face {
-        font-family: 'Playfair Display Variable';
+        font-family: 'Bricolage Grotesque Variable';
         font-style: normal;
         font-display: swap;
-        font-weight: 400 900;
-        src: url(@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2)
+        font-weight: 200 800;
+        src: url(@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2)
             format('woff2-variations');
         unicode-range:
             U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
             U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
 
-    /* lora-latin-wght-normal */
+    /* hanken-grotesk — body */
     @font-face {
-        font-family: 'Lora Variable';
+        font-family: 'Hanken Grotesk Variable';
         font-style: normal;
         font-display: swap;
-        font-weight: 400 700;
-        src: url(@fontsource-variable/lora/files/lora-latin-wght-normal.woff2)
+        font-weight: 100 900;
+        src: url(@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2)
             format('woff2-variations');
         unicode-range:
             U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
             U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-    }
-
-    /* space-mono — ledger numerals & labels */
-    @font-face {
-        font-family: 'Space Mono';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 400;
-        src: url(@fontsource/space-mono/files/space-mono-latin-400-normal.woff2) format('woff2');
-    }
-    @font-face {
-        font-family: 'Space Mono';
-        font-style: normal;
-        font-display: swap;
-        font-weight: 700;
-        src: url(@fontsource/space-mono/files/space-mono-latin-700-normal.woff2) format('woff2');
     }
 }
 
@@ -129,34 +106,43 @@
     h4,
     h5,
     h6 {
-        font-family: var(--font-serif);
-        line-height: 1.1;
-        letter-spacing: -0.012em;
+        font-family: var(--font-heading);
+        line-height: 1.04;
+        letter-spacing: -0.02em;
     }
 }
 
-/* --- Signature utilities ------------------------------------------ */
+/* --- utilities ---------------------------------------------------- */
 
-/* Monospace tabular numerals — costs, counts, dates in "ledger" UI */
-@utility ledger {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-}
-
-/* Mono uppercase micro-label / eyebrow */
+/* small bold label */
 @utility eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-body);
     text-transform: uppercase;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.08em;
     font-weight: 700;
     line-height: 1;
 }
 
-@utility text-list {
-    span:not(:last-of-type)::after {
-        content: ', ';
-    }
+/* aligned numerals for costs / counts */
+@utility ledger {
+    font-variant-numeric: tabular-nums;
+}
+
+/* hand-drawn highlight swipe on a word */
+@utility marker {
+    background-image: linear-gradient(
+        transparent 58%,
+        color-mix(in srgb, var(--color-accent) 55%, transparent) 58%
+    );
+    padding-inline: 0.06em;
+}
+
+/* faint architectural grid — "graph paper" blueprint motif */
+@utility blueprint {
+    background-image:
+        linear-gradient(var(--color-blueprint) 1px, transparent 1px),
+        linear-gradient(90deg, var(--color-blueprint) 1px, transparent 1px);
+    background-size: 28px 28px;
 }
 
 @utility text-list-dot {

@@ -25,10 +25,10 @@ const { tag } = Astro.params
     <div class="mb-12" data-pagefind-ignore>
         <!-- Header -->
         <div class="mb-8">
-            <p class="eyebrow text-secondary mb-3 text-xs">
+            <p class="eyebrow text-primary mb-3 text-xs">
                 {`${filtered.length} ${filtered.length === 1 ? 'post tagged' : 'posts tagged'}`}
             </p>
-            <h1 class="text-base-content font-serif text-5xl font-black md:text-6xl">
+            <h1 class="text-base-content font-heading text-5xl font-extrabold md:text-6xl">
                 <span class="text-base-content/35">#</span>{tag}
             </h1>
         </div>

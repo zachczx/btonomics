@@ -63,14 +63,16 @@ if (matchedCategory) {
         <!-- Header -->
         <div class="mb-10">
             <nav class="mb-4 text-sm">
-                <a href="/" class="text-base-content/60 hover:text-primary transition-colors">Home</a>
+                <a href="/" class="text-base-content/60 hover:text-primary transition-colors"
+                    >Home</a
+                >
                 <span class="text-base-content/40 mx-2">/</span>
                 <span class="text-base-content/80 capitalize">{pageTitle}</span>
             </nav>
-            <p class="eyebrow text-secondary mb-3 text-xs">
+            <p class="eyebrow text-primary mb-3 text-xs">
                 {`${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`}
             </p>
-            <h1 class="text-base-content font-serif text-5xl font-black md:text-6xl">
+            <h1 class="text-base-content font-heading text-5xl font-extrabold md:text-6xl">
                 {pageTitle}
             </h1>
             <p class="text-base-content/65 mt-3 max-w-2xl text-lg">

@@ -1,5 +1,5 @@
-import eslintPluginAstro from 'eslint-plugin-astro';
-import eslintConfigPrettier from 'eslint-config-prettier';
+import eslintPluginAstro from 'eslint-plugin-astro'
+import eslintConfigPrettier from 'eslint-config-prettier'
 export default [
     // add more generic rule sets here, such as:
     // js.configs.recommended,
@@ -11,4 +11,4 @@ export default [
         },
     },
     eslintConfigPrettier,
-];
+]

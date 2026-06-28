@@ -17,8 +17,10 @@ const sortedCategories = Object.keys(postsByCategory).sort()
 
 <Layout title="Blog">
     <div class="mb-12">
-        <p class="eyebrow text-secondary mb-3 text-xs">{allPosts.length} posts and counting</p>
-        <h1 class="text-base-content font-serif text-5xl font-black md:text-6xl">Every Post</h1>
+        <p class="eyebrow text-primary mb-3 text-xs">{allPosts.length} posts and counting</p>
+        <h1 class="text-base-content font-heading text-5xl font-extrabold md:text-6xl">
+            Every post
+        </h1>
         <p class="text-base-content/65 mt-3 max-w-2xl text-lg">
             The whole renovation diary — wins, regrets, and receipts — sorted by topic.
         </p>
@@ -29,7 +31,7 @@ const sortedCategories = Object.keys(postsByCategory).sort()
             sortedCategories.map((category) => (
                 <section>
                     <div class="border-base-300 mb-6 flex items-baseline justify-between border-b pb-3">
-                        <h2 class="text-base-content font-serif text-2xl font-bold capitalize md:text-3xl">
+                        <h2 class="text-base-content font-heading text-2xl font-bold capitalize md:text-3xl">
                             {category.replace(/-/g, ' ')}
                         </h2>
                         <span class="ledger text-base-content/45 text-xs">

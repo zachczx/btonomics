@@ -10,104 +10,117 @@ interface Props {
 const { verdict, recommend, rating, cost, pros = [], cons = [] } = Astro.props
 
 const recMap = {
-    yes: { label: 'Would do again', cls: 'text-success', icon: '✓' },
-    no: { label: 'Would skip', cls: 'text-error', icon: '✕' },
-    maybe: { label: 'It depends', cls: 'text-warning', icon: '~' },
+    yes: { label: 'Would do again', tint: 'bg-softteal text-secondary', icon: '✓' },
+    no: { label: 'Would skip', tint: 'bg-softcoral text-primary', icon: '✕' },
+    maybe: { label: 'It depends', tint: 'bg-softmarigold text-accent-content', icon: '~' },
 } as const
 const rec = recommend ? recMap[recommend] : null
 const hasFigures = !!cost || !!rec
 const hasLists = pros.length > 0 || cons.length > 0
 ---
 
-<aside class="not-prose border-base-300 bg-base-200/60 my-10 overflow-hidden rounded-lg border shadow-sm">
-    <!-- receipt header -->
-    <div class="border-base-300 flex items-center justify-between border-b border-dashed px-5 py-3">
-        <span class="eyebrow text-secondary text-[0.7rem]">The verdict</span>
-        {
-            rating != null && (
-                <span class="flex items-center gap-1" title={`${rating} out of 5`}>
-                    {[1, 2, 3, 4, 5].map((i) => (
-                        <span
-                            class={
-                                i <= Math.round(rating)
-                                    ? 'text-secondary text-xs'
-                                    : 'text-base-content/20 text-xs'
-                            }
-                        >
-                            ●
+<aside class="not-prose my-10">
+    <div class="border-base-300 bg-base-200 overflow-hidden rounded-2xl border">
+        <!-- header: label + star rating -->
+        <div class="border-base-300 flex items-center justify-between gap-3 border-b px-5 py-4">
+            <span class="eyebrow text-primary text-[0.7rem]">The verdict</span>
+            {
+                rating != null && (
+                    <span class="flex items-center gap-1.5" title={`${rating} out of 5`}>
+                        <span class="flex items-center gap-0.5">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                                <span
+                                    class={
+                                        i <= Math.round(rating)
+                                            ? 'text-secondary text-sm'
+                                            : 'text-base-300 text-sm'
+                                    }
+                                >
+                                    ★
+                                </span>
+                            ))}
                         </span>
-                    ))}
-                    <span class="ledger text-base-content/45 ml-1 text-xs">{rating}/5</span>
-                </span>
-            )
-        }
-    </div>
+                        <span class="ledger text-ink/50 text-xs font-semibold">{rating}/5</span>
+                    </span>
+                )
+            }
+        </div>
 
-    <div class="space-y-4 px-5 py-4">
-        {
-            verdict && (
-                <p class="text-base-content font-serif text-xl leading-snug font-medium">
-                    “{verdict}”
-                </p>
-            )
-        }
+        <div class="space-y-5 px-5 py-5">
+            {
+                verdict && (
+                    <p class="font-heading text-ink text-2xl leading-snug font-bold">“{verdict}”</p>
+                )
+            }
 
-        {
-            hasFigures && (
-                <div class="flex flex-wrap items-end gap-x-8 gap-y-3">
-                    {cost && (
-                        <div>
-                            <span class="eyebrow text-base-content/45 block text-[0.6rem]">
-                                What it cost
-                            </span>
-                            <span class="ledger text-base-content text-xl font-bold">{cost}</span>
-                        </div>
-                    )}
-                    {rec && (
-                        <div>
-                            <span class="eyebrow text-base-content/45 block text-[0.6rem]">
-                                The call
-                            </span>
-                            <span class={`ledger text-xl font-bold ${rec.cls}`}>
-                                {rec.icon} {rec.label}
-                            </span>
-                        </div>
-                    )}
-                </div>
-            )
-        }
+            {
+                hasFigures && (
+                    <div class="flex flex-wrap gap-3">
+                        {cost && (
+                            <div class="bg-softmarigold rounded-xl px-4 py-3">
+                                <span class="eyebrow text-accent-content/55 block text-[0.58rem]">
+                                    What it cost
+                                </span>
+                                <span class="ledger text-ink mt-0.5 block text-lg font-bold">
+                                    {cost}
+                                </span>
+                            </div>
+                        )}
+                        {rec && (
+                            <div class={`rounded-xl px-4 py-3 ${rec.tint}`}>
+                                <span class="eyebrow block text-[0.58rem] opacity-65">
+                                    The call
+                                </span>
+                                <span class="mt-0.5 flex items-center gap-1.5 text-lg font-bold">
+                                    <span>{rec.icon}</span>
+                                    {rec.label}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                )
+            }
 
-        {
-            hasLists && (
-                <div class="border-base-300 grid gap-5 border-t border-dashed pt-4 sm:grid-cols-2">
-                    {pros.length > 0 && (
-                        <div>
-                            <span class="eyebrow text-success text-[0.65rem]">The good</span>
-                            <ul class="mt-2 space-y-1.5">
-                                {pros.map((p) => (
-                                    <li class="text-base-content/80 flex gap-2 text-sm leading-snug">
-                                        <span class="text-success font-bold">+</span>
-                                        <span>{p}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                    {cons.length > 0 && (
-                        <div>
-                            <span class="eyebrow text-error text-[0.65rem]">The bad</span>
-                            <ul class="mt-2 space-y-1.5">
-                                {cons.map((c) => (
-                                    <li class="text-base-content/80 flex gap-2 text-sm leading-snug">
-                                        <span class="text-error font-bold">–</span>
-                                        <span>{c}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                </div>
-            )
-        }
+            {
+                hasLists && (
+                    <div class="border-base-300 grid gap-5 border-t pt-5 sm:grid-cols-2">
+                        {pros.length > 0 && (
+                            <div>
+                                <span class="eyebrow text-secondary text-[0.65rem]">
+                                    What we loved
+                                </span>
+                                <ul class="mt-2.5 space-y-2">
+                                    {pros.map((p) => (
+                                        <li class="text-ink/80 flex gap-2.5 text-sm leading-snug">
+                                            <span class="bg-softteal text-secondary mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[0.65rem] font-bold">
+                                                +
+                                            </span>
+                                            <span>{p}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        {cons.length > 0 && (
+                            <div>
+                                <span class="eyebrow text-primary text-[0.65rem]">
+                                    What bugged us
+                                </span>
+                                <ul class="mt-2.5 space-y-2">
+                                    {cons.map((c) => (
+                                        <li class="text-ink/80 flex gap-2.5 text-sm leading-snug">
+                                            <span class="bg-softcoral text-primary mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[0.65rem] font-bold">
+                                                –
+                                            </span>
+                                            <span>{c}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                )
+            }
+        </div>
     </div>
 </aside>

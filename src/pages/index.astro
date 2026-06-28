@@ -1,169 +1,138 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import PostCard from '../components/PostCard.astro'
 import { Image } from 'astro:assets'
 import { CleanAndSort } from '../lib/utils'
-import headerImage2 from '../images/36_upload_IMG_20180730_204953_header.jpg'
-import headerImage1 from '../images/3_concept1_header-topaz-enhance-4x.webp'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
+import vision from '../images/3_concept1_header-topaz-enhance-4x.webp'
+import reality from '../images/36_upload_IMG_20180730_204953_header.jpg'
 import { categories } from '../data/categories'
 
 import CryingEmoji from '~icons/noto/loudly-crying-face'
 import Party from '~icons/noto/party-popper'
 
-dayjs.extend(relativeTime)
-
 const allPosts = await CleanAndSort()
 allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-
 const latestPosts = allPosts.slice(0, 6)
-
 const regretPost = allPosts.find((post) => post.data.mood === 'negative')
 const worthItPost = allPosts.find((post) => post.data.mood === 'positive')
 
 const categoryCounts: Record<string, number> = {}
 categories.forEach((cat) => {
     const catTags = cat.tags.map((t) => t.toLowerCase())
-    const count = allPosts.filter((post) => {
-        const postTags = (post.data.tags || []).map((t) => t.toLowerCase())
-        return postTags.some((t) => catTags.includes(t))
-    }).length
-    categoryCounts[cat.slug] = count
+    categoryCounts[cat.slug] = allPosts.filter((post) =>
+        (post.data.tags || []).map((t) => t.toLowerCase()).some((t) => catTags.includes(t)),
+    ).length
 })
 
-const formatDate = (date: Date) => dayjs(date).fromNow()
-
-// Running "ledger" of honest tallies — picked at build time.
-const allStats = [
-    '48 Taobao bulbs bought · 6 used',
-    '23 defects at handover · 2000+ since',
-    '∞ "sorry to disturb" texts to our ID',
-    '2018 minimalist dream → 2026 toy minefield',
-    '6 months reno · 47 arguments · 1 home',
-    'Hours on Taobao at 2am: too many',
-]
-const shuffled = [...allStats].sort(() => Math.random() - 0.5)
-const displayStats = shuffled.slice(0, 3)
-
-const catTints = [
-    'group-hover:border-primary',
-    'group-hover:border-secondary',
-    'group-hover:border-info',
-    'group-hover:border-warning',
-    'group-hover:border-accent',
-    'group-hover:border-success',
+const chipTints = [
+    'bg-softcoral text-primary',
+    'bg-softteal text-secondary',
+    'bg-softmarigold text-accent-content',
 ]
 ---
 
 <Layout title="Home" fullBleed>
-    <!-- ============ HERO: thesis ============ -->
-    <section class="bg-base-200 relative overflow-hidden">
+    <!-- ============ HERO — before / after ============ -->
+    <section class="bg-paper relative overflow-hidden">
         <div
-            class="container mx-auto grid items-center gap-12 px-4 py-16 md:py-24 lg:grid-cols-[1.05fr_0.95fr]"
+            class="blueprint pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_85%)] opacity-30"
+        >
+        </div>
+        <div
+            class="relative container mx-auto grid items-center gap-12 px-4 py-16 md:py-20 lg:grid-cols-2"
         >
             <div>
-                <p class="eyebrow text-secondary mb-5 text-xs">The honest HDB renovation log</p>
-                <h1
-                    class="text-base-content font-serif text-5xl leading-[1.04] font-black md:text-6xl"
+                <span
+                    class="eyebrow border-ink/10 bg-base-100 text-secondary inline-flex items-center gap-2 rounded-full border-2 px-4 py-2 text-[0.66rem]"
                 >
-                    We renovated our HDB on a budget —<span class="text-primary">
-                        and kept every receipt.</span
-                    >
+                    Bukit Batok · 4-room HDB · since 2018
+                </span>
+                <h1 class="text-ink mt-5 text-5xl leading-[1.0] font-extrabold md:text-6xl">
+                    Renovating a home, <span class="marker">honestly.</span>
                 </h1>
-                <p class="text-base-content/75 mt-6 max-w-xl text-lg leading-relaxed">
-                    The wins, the regrets, and exactly what each one cost. So your first home turns
-                    out a little better than ours did.
+                <p class="text-ink/70 mt-5 max-w-md text-lg leading-relaxed">
+                    The wins, the regrets, and what each one actually cost — so your first place
+                    turns out better than ours did.
                 </p>
                 <div class="mt-8 flex flex-wrap gap-3">
-                    <a href="/blog" class="btn btn-primary rounded-full px-6">Read the latest</a>
+                    <a
+                        href="/blog"
+                        class="bg-neutral text-neutral-content rounded-full px-6 py-3 font-semibold transition-transform hover:-translate-y-0.5"
+                        >Read the latest</a
+                    >
                     <a
                         href="/renovation/our-clean-bto-home-design"
-                        class="btn btn-outline border-base-content/20 rounded-full px-6">See our home</a
+                        class="border-ink/15 text-ink hover:border-ink/40 rounded-full border-2 px-6 py-3 font-semibold transition-colors"
+                        >See our home</a
                     >
                 </div>
             </div>
 
-            <!-- Vision / Reality before-after -->
-            <div class="relative mx-auto w-full max-w-md">
-                <figure class="bg-base-100 relative z-10 rotate-1 p-3 shadow-xl">
-                    <div class="bg-base-200 aspect-4/3 overflow-hidden">
-                        <Image
-                            src={headerImage2}
-                            alt="Our finished living and dining room"
-                            width={720}
-                            height={540}
-                            class="h-full w-full object-cover"
-                            loading="eager"
-                        />
-                    </div>
-                    <figcaption class="mt-2 flex items-center justify-between px-1">
-                        <span class="eyebrow text-secondary text-[0.6rem]">After · The Reality</span>
-                        <span class="ledger text-base-content/40 text-xs">2018</span>
-                    </figcaption>
-                </figure>
-                <figure
-                    class="bg-base-100 absolute -top-8 -left-6 z-0 hidden w-40 -rotate-3 p-2 shadow-lg sm:block lg:-left-10 lg:w-48"
+            <!-- before / after signature -->
+            <div class="relative mx-auto w-full max-w-lg">
+                <div class="grid grid-cols-2 gap-4">
+                    <figure class="relative">
+                        <div
+                            class="border-ink/10 bg-base-100 aspect-4/5 overflow-hidden rounded-2xl border-2"
+                        >
+                            <Image
+                                src={vision}
+                                alt="The original 3D design concept"
+                                width={420}
+                                height={525}
+                                class="h-full w-full object-cover grayscale"
+                                loading="eager"
+                            />
+                        </div>
+                        <span
+                            class="eyebrow bg-neutral/90 text-neutral-content absolute top-3 left-3 rounded-full px-2.5 py-1 text-[0.55rem]"
+                            >Before · the plan</span
+                        >
+                    </figure>
+                    <figure class="relative">
+                        <div
+                            class="border-ink/10 bg-base-100 aspect-4/5 overflow-hidden rounded-2xl border-2"
+                        >
+                            <Image
+                                src={reality}
+                                alt="Our finished living and dining room"
+                                width={420}
+                                height={525}
+                                class="h-full w-full object-cover"
+                                loading="eager"
+                            />
+                        </div>
+                        <span
+                            class="eyebrow bg-secondary text-secondary-content absolute top-3 left-3 rounded-full px-2.5 py-1 text-[0.55rem]"
+                            >After · the reality</span
+                        >
+                    </figure>
+                </div>
+                <div
+                    class="bg-neutral text-neutral-content absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xl font-bold shadow-lg"
                 >
-                    <div class="bg-base-200 aspect-4/3 overflow-hidden">
-                        <Image
-                            src={headerImage1}
-                            alt="The original 3D design concept"
-                            width={240}
-                            height={180}
-                            class="h-full w-full object-cover grayscale"
-                            loading="eager"
-                        />
-                    </div>
-                    <figcaption class="eyebrow text-base-content/45 mt-1 text-center text-[0.5rem]">
-                        Before · The plan
-                    </figcaption>
-                </figure>
+                    →
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ============ LEDGER STRIP ============ -->
-    <div class="bg-forest text-forest-content">
-        <div
-            class="container mx-auto flex flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 py-4"
-        >
-            {
-                displayStats.map((stat, i) => (
-                    <>
-                        <span class="ledger text-forest-content/85 text-xs tracking-tight">
-                            {stat}
-                        </span>
-                        {i < displayStats.length - 1 && (
-                            <span class="text-secondary hidden text-xs sm:inline">✦</span>
-                        )}
-                    </>
-                ))
-            }
-        </div>
-    </div>
-
-    <!-- ============ THE HONEST TRUTH (Win / Fail) ============ -->
+    <!-- ============ THE HONEST TRUTH ============ -->
     {
         (regretPost || worthItPost) && (
             <section class="bg-base-100 py-16 md:py-20">
                 <div class="container mx-auto px-4">
-                    <div class="mb-10 text-center">
-                        <p class="eyebrow text-secondary mb-3 text-xs">Receipts don't lie</p>
-                        <h2 class="text-base-content font-serif text-3xl font-bold md:text-4xl">
-                            The Honest Truth
-                        </h2>
+                    <div class="mb-9">
+                        <span class="eyebrow text-primary text-[0.7rem]">Receipts don't lie</span>
+                        <h2 class="text-ink mt-2 text-4xl font-extrabold">The honest truth</h2>
                     </div>
-
-                    <div class="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+                    <div class="grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
                         {regretPost && (
                             <a
                                 href={`/${regretPost.data.category}/${regretPost.data.slug}`}
                                 class="group block"
                             >
-                                <div class="border-error/30 bg-base-100 hover:border-error overflow-hidden rounded-lg border-2 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                    <div class="bg-error text-error-content eyebrow flex items-center gap-2 px-4 py-2.5 text-xs">
-                                        <CryingEmoji /> Fail · we regret this
-                                    </div>
+                                <div class="border-error/25 bg-base-100 hover:border-error overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1">
                                     {regretPost.data.image && (
                                         <div class="bg-base-200 aspect-video overflow-hidden">
                                             <Image
@@ -176,26 +145,25 @@ const catTints = [
                                         </div>
                                     )}
                                     <div class="p-5">
-                                        <h3 class="text-base-content group-hover:text-primary font-serif text-lg font-bold transition-colors">
+                                        <span class="eyebrow bg-error text-error-content inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.6rem]">
+                                            <CryingEmoji /> Fail
+                                        </span>
+                                        <h3 class="text-ink group-hover:text-primary mt-3 text-lg font-bold transition-colors">
                                             {regretPost.data.title}
                                         </h3>
-                                        <p class="text-base-content/55 mt-1.5 text-sm italic">
+                                        <p class="text-ink/55 mt-1 text-sm">
                                             Read the cautionary tale →
                                         </p>
                                     </div>
                                 </div>
                             </a>
                         )}
-
                         {worthItPost && (
                             <a
                                 href={`/${worthItPost.data.category}/${worthItPost.data.slug}`}
                                 class="group block"
                             >
-                                <div class="border-success/30 bg-base-100 hover:border-success overflow-hidden rounded-lg border-2 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                    <div class="bg-success text-success-content eyebrow flex items-center gap-2 px-4 py-2.5 text-xs">
-                                        <Party /> Win · we'd do it again
-                                    </div>
+                                <div class="border-secondary/25 bg-base-100 hover:border-secondary overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1">
                                     {worthItPost.data.image && (
                                         <div class="bg-base-200 aspect-video overflow-hidden">
                                             <Image
@@ -208,10 +176,13 @@ const catTints = [
                                         </div>
                                     )}
                                     <div class="p-5">
-                                        <h3 class="text-base-content group-hover:text-primary font-serif text-lg font-bold transition-colors">
+                                        <span class="eyebrow bg-secondary text-secondary-content inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.6rem]">
+                                            <Party /> Win
+                                        </span>
+                                        <h3 class="text-ink group-hover:text-secondary mt-3 text-lg font-bold transition-colors">
                                             {worthItPost.data.title}
                                         </h3>
-                                        <p class="text-base-content/55 mt-1.5 text-sm italic">
+                                        <p class="text-ink/55 mt-1 text-sm">
                                             See why we'd do it again →
                                         </p>
                                     </div>
@@ -225,116 +196,43 @@ const catTints = [
     }
 
     <!-- ============ LATEST ============ -->
-    <section class="bg-base-200 py-16 md:py-20">
+    <section class="bg-paper py-16 md:py-20">
         <div class="container mx-auto px-4">
             <div class="mb-8 flex flex-wrap items-end justify-between gap-2">
                 <div>
-                    <p class="eyebrow text-secondary mb-2 text-xs">Fresh off the to-do list</p>
-                    <h2 class="text-base-content font-serif text-3xl font-bold md:text-4xl">
-                        Latest Happenings
-                    </h2>
+                    <span class="eyebrow text-primary text-[0.7rem]">Fresh off the to-do list</span>
+                    <h2 class="text-ink mt-2 text-4xl font-extrabold">Latest happenings</h2>
                 </div>
                 <a
                     href="/blog"
-                    class="text-primary hover:text-accent flex items-center gap-1 text-sm font-bold transition-colors"
+                    class="text-secondary inline-flex items-center gap-1 font-semibold hover:underline"
+                    >See all →</a
                 >
-                    See all
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-4 w-4"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </a>
             </div>
-
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {
-                    latestPosts.map((post) => (
-                        <article class="group">
-                            <a href={`/${post.data.category}/${post.data.slug}`} class="block">
-                                <div class="bg-base-100 overflow-hidden rounded-lg shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                                    <div class="bg-base-200 aspect-4/3 overflow-hidden">
-                                        {post.data.image && (
-                                            <Image
-                                                src={post.data.image}
-                                                alt={post.data.title}
-                                                width={600}
-                                                height={450}
-                                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                            />
-                                        )}
-                                    </div>
-                                    <div class="p-5">
-                                        <div class="mb-2 flex items-center gap-2">
-                                            <span class="eyebrow text-secondary text-[0.6rem]">
-                                                {post.data.tags?.[0] || 'Post'}
-                                            </span>
-                                            <span class="bg-base-300 h-px flex-1" />
-                                            <span class="ledger text-base-content/45 text-[0.7rem]">
-                                                {formatDate(post.data.pubDate)}
-                                            </span>
-                                        </div>
-                                        <h3 class="text-base-content group-hover:text-primary font-serif text-lg leading-snug font-bold transition-colors">
-                                            {post.data.title}
-                                        </h3>
-                                    </div>
-                                </div>
-                            </a>
-                        </article>
-                    ))
-                }
+                {latestPosts.map((post) => <PostCard post={post} />)}
             </div>
         </div>
     </section>
 
     <!-- ============ BROWSE BY TOPIC ============ -->
-    <section class="bg-sagetint py-16 md:py-20">
+    <section class="bg-base-100 py-16 md:py-20">
         <div class="container mx-auto px-4">
-            <div class="mb-10 text-center">
-                <p class="eyebrow text-secondary mb-3 text-xs">Find your rabbit hole</p>
-                <h2 class="text-base-content font-serif text-3xl font-bold md:text-4xl">
-                    Browse by Topic
-                </h2>
+            <div class="mb-8">
+                <span class="eyebrow text-primary text-[0.7rem]">Find your rabbit hole</span>
+                <h2 class="text-ink mt-2 text-4xl font-extrabold">Browse by topic</h2>
             </div>
-
-            <div class="mx-auto grid max-w-5xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="flex flex-wrap gap-3">
                 {
-                    categories.map((cat, index) => (
-                        <a href={`/${cat.slug}`} class="group block">
-                            <div
-                                class={`flex h-full items-center gap-4 rounded-lg border-2 border-transparent bg-base-100 p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${catTints[index % catTints.length]}`}
-                            >
-                                <div class="bg-base-200 h-20 w-20 shrink-0 overflow-hidden rounded-md">
-                                    {cat.icon && (
-                                        <Image
-                                            src={cat.icon}
-                                            alt=""
-                                            width={160}
-                                            height={160}
-                                            class="h-full w-full object-cover"
-                                        />
-                                    )}
-                                </div>
-                                <div class="min-w-0">
-                                    <div class="flex items-baseline gap-2">
-                                        <h3 class="text-base-content group-hover:text-primary font-serif text-lg font-bold transition-colors">
-                                            {cat.name}
-                                        </h3>
-                                        <span class="ledger text-base-content/40 text-xs">
-                                            {categoryCounts[cat.slug]}
-                                        </span>
-                                    </div>
-                                    <p class="text-base-content/60 mt-1 line-clamp-2 text-xs leading-relaxed">
-                                        {cat.description}
-                                    </p>
-                                </div>
-                            </div>
+                    categories.map((cat, i) => (
+                        <a
+                            href={`/${cat.slug}`}
+                            class={`group inline-flex items-center gap-2 rounded-full px-5 py-3 font-semibold transition-transform hover:-translate-y-0.5 ${chipTints[i % chipTints.length]}`}
+                        >
+                            {cat.name}
+                            <span class="ledger rounded-full bg-white/55 px-2 py-0.5 text-xs">
+                                {categoryCounts[cat.slug]}
+                            </span>
                         </a>
                     ))
                 }

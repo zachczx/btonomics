@@ -4,6 +4,14 @@ import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout title="Search">
+    <div class="mb-8">
+        <p class="eyebrow text-primary mb-3 text-xs">Look it up</p>
+        <h1 class="text-ink font-heading text-5xl font-extrabold md:text-6xl">Search</h1>
+        <p class="text-ink/65 mt-3 max-w-xl text-lg">
+            Find a post by room, material, brand — or the mistake you're trying not to repeat.
+        </p>
+    </div>
+
     <PagefindSearch
         id="search"
         className="pagefind-ui w-full"
@@ -17,18 +25,20 @@ import Layout from '../layouts/Layout.astro'
         --pagefind-ui-primary: var(--color-primary);
         --pagefind-ui-text: var(--color-base-content);
         --pagefind-ui-background: none;
-        --pagefind-ui-border: var(--color-neutral);
-        --pagefind-ui-tag: #eeeeee;
+        --pagefind-ui-border: var(--color-base-300);
+        --pagefind-ui-tag: var(--color-base-200);
         --pagefind-ui-border-width: 2px;
-        --pagefind-ui-border-radius: 8px;
-        --pagefind-ui-image-border-radius: 8px;
+        --pagefind-ui-border-radius: 0.7rem;
+        --pagefind-ui-image-border-radius: 0.7rem;
         --pagefind-ui-image-box-ratio: 3 / 2;
-        --pagefind-ui-font: 'Nunito Sans', sans-serif;
+        --pagefind-ui-font: var(--font-body);
 
         min-width: 100% !important;
         & mark {
-            background-color: #f4bf50;
-            padding: 0.1em 0.5em 0.1em 0.5em;
+            background-color: var(--color-accent);
+            color: var(--color-ink);
+            border-radius: 0.25rem;
+            padding: 0.05em 0.35em;
         }
     }
 
@@ -38,35 +48,42 @@ import Layout from '../layouts/Layout.astro'
 
     .pagefind-ui__result-link,
     .pagefind-ui__result-title {
-        color: var(--color-primary) !important;
-        text-decoration: underline;
+        color: var(--color-ink) !important;
+        font-family: var(--font-heading);
+        text-decoration: none;
 
         &:hover {
-            color: var(--color-accent) !important;
+            color: var(--color-primary) !important;
         }
     }
 
     .pagefind-ui__button {
         border: 0 !important;
+        color: var(--color-secondary) !important;
+        font-weight: 600;
     }
 
     .pagefind-ui .pagefind-ui__result-excerpt {
-        color: #d6d6d6;
+        color: rgb(27 23 20 / 0.7);
     }
     .pagefind-ui__search-input {
-        border: #d6d6d6 solid 1px !important;
+        border: var(--color-base-300) solid 2px !important;
+        border-radius: 2rem !important;
+        background: var(--color-base-100);
     }
 
     .pagefind-ui__search-input:active,
     .pagefind-ui__search-input:focus {
         border: var(--color-primary) solid 2px !important;
+        outline: none;
     }
     .pagefind-ui__search-input::placeholder {
-        color: #d6d6d6 !important;
-        opacity: 0.7 !important;
+        color: rgb(27 23 20 / 0.4) !important;
+        opacity: 1 !important;
     }
     .pagefind-ui__search-clear {
         font-weight: bold;
         font-size: 1.2em !important;
+        color: var(--color-primary) !important;
     }
 </style>

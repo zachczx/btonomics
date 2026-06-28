@@ -23,7 +23,9 @@ import { categories } from '../data/categories'
 export function getCategorySlug(categoryName: string): string {
     // 1. Try to find strict match in defined categories
     const found = categories.find(
-        (c) => c.name.toLowerCase() === categoryName.toLowerCase() || c.slug === categoryName.toLowerCase(),
+        (c) =>
+            c.name.toLowerCase() === categoryName.toLowerCase() ||
+            c.slug === categoryName.toLowerCase(),
     )
     if (found) return found.slug
 
@@ -38,9 +40,8 @@ export async function CleanAndSort() {
         entry.data.category = getCategorySlug(entry.data.category)
     })
 
-
     posts.sort((a, b) => {
-         return b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+        return b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
     })
 
     return posts
