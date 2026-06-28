@@ -2,7 +2,9 @@
 import Layout from '../../layouts/Layout.astro'
 import TableOfContents from '../../components/TableOfContents.astro'
 import FormattedDate from '../../components/FormattedDate.astro'
+import ReviewSummary from '../../components/ReviewSummary.astro'
 import { getCollection, render } from 'astro:content'
+import { Image } from 'astro:assets'
 import Prose from '../../components/Prose.astro'
 import { getCategorySlug } from '../../lib/utils'
 
@@ -20,48 +22,86 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props
 const { Content, headings } = await render(entry)
+const d = entry.data
+
+const hasReview = !!(
+    d.verdict ||
+    d.cost ||
+    d.rating != null ||
+    (d.pros && d.pros.length) ||
+    (d.cons && d.cons.length)
+)
 ---
 
-<Layout title={entry.data.title}>
-    <div class="mx-auto w-full max-w-[1440px] lg:flex lg:gap-8">
-        <main class="bg-base-100 min-w-0 flex-1 rounded-2xl p-4 shadow-md lg:p-8">
-            <div class="mb-16 lg:max-w-5xl">
-                <nav class="text-base-content/80 mb-6 text-sm">
+<Layout title={d.title}>
+    <div class="mx-auto w-full max-w-[1440px] lg:flex lg:gap-10">
+        <main class="bg-base-100 min-w-0 flex-1 rounded-2xl p-5 shadow-sm lg:p-10">
+            <!-- Header (single reading measure) -->
+            <div class="mx-auto max-w-[44rem]">
+                <nav class="text-base-content/70 mb-6 text-sm">
                     <a href="/" class="hover:text-primary transition-colors">Home</a>
-                    <span class="mx-2">/</span>
+                    <span class="mx-2 opacity-40">/</span>
                     <a
-                        href={`/${getCategorySlug(entry.data.category)}`}
+                        href={`/${getCategorySlug(d.category)}`}
                         class="hover:text-primary capitalize transition-colors"
                     >
-                        {entry.data.category}
+                        {d.category}
                     </a>
                 </nav>
 
+                {
+                    d.mood && (
+                        <span
+                            class={`eyebrow mb-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.65rem] ${d.mood === 'positive' ? 'bg-success/12 text-success' : d.mood === 'negative' ? 'bg-error/12 text-error' : 'bg-base-200 text-base-content/60'}`}
+                        >
+                            {d.mood === 'positive'
+                                ? 'A win'
+                                : d.mood === 'negative'
+                                  ? 'A regret'
+                                  : 'A lesson'}
+                        </span>
+                    )
+                }
+
                 <h1
-                    class="text-base-content mb-4 text-4xl leading-tight font-bold md:text-5xl lg:text-6xl"
+                    class="text-base-content font-serif text-4xl leading-[1.08] font-black md:text-5xl"
                 >
-                    {entry.data.title}
+                    {d.title}
                 </h1>
 
+                {
+                    d.description && (
+                        <p class="text-base-content/65 mt-4 text-lg leading-relaxed">
+                            {d.description}
+                        </p>
+                    )
+                }
+
                 <div
-                    class="text-base-content/70 mb-6 flex flex-wrap items-center gap-4 text-sm font-medium"
+                    class="text-base-content/55 ledger mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs"
                 >
-                    <time><FormattedDate date={entry.data.pubDate} /></time>
-
-                    <span class="opacity-30">•</span>
-
-                    <div class="capitalize">
-                        {entry.data.category}
-                    </div>
+                    <span>By {d.author}</span>
+                    <span class="opacity-40">·</span>
+                    <FormattedDate date={d.pubDate} />
+                    {
+                        d.updated && (
+                            <>
+                                <span class="opacity-40">·</span>
+                                <span>
+                                    updated <FormattedDate date={d.updated} />
+                                </span>
+                            </>
+                        )
+                    }
                 </div>
 
                 {
-                    entry.data.tags && entry.data.tags.length > 0 && (
-                        <div class="flex flex-wrap gap-2">
-                            {entry.data.tags.map((tag) => (
+                    d.tags && d.tags.length > 0 && (
+                        <div class="mt-5 flex flex-wrap gap-2">
+                            {d.tags.map((tag) => (
                                 <a
                                     href={`/tag/${tag}`}
-                                    class="bg-base-200 hover:bg-primary rounded-full px-3 py-1 text-xs transition-colors duration-200 hover:text-white"
+                                    class="border-base-300 text-base-content/70 hover:border-secondary hover:text-secondary rounded-full border px-3 py-1 text-xs transition-colors"
                                 >
                                     {tag}
                                 </a>
@@ -69,25 +109,58 @@ const { Content, headings } = await render(entry)
                         </div>
                     )
                 }
-
-                <div class="border-base-300 mt-8 mb-12 border-t"></div>
             </div>
 
-            <article>
-                <Prose>
-                    <Content />
-                </Prose>
-            </article>
+            <!-- Cover image (breaks wider than the text column) -->
+            {
+                d.image && (
+                    <figure class="mx-auto mt-8 mb-4 max-w-[56rem]">
+                        <Image
+                            src={d.image}
+                            alt={d.title}
+                            width={1100}
+                            class="max-h-[30rem] w-full rounded-lg object-cover shadow-sm"
+                        />
+                    </figure>
+                )
+            }
+
+            <!-- Verdict receipt + body (single measure) -->
+            <div class="mx-auto max-w-[44rem]">
+                {
+                    hasReview && (
+                        <ReviewSummary
+                            verdict={d.verdict}
+                            recommend={d.recommend}
+                            rating={d.rating}
+                            cost={d.cost}
+                            pros={d.pros}
+                            cons={d.cons}
+                        />
+                    )
+                }
+
+                {!hasReview && <div class="border-base-300 mt-8 mb-2 border-t" />}
+
+                <article>
+                    <Prose>
+                        <Content />
+                    </Prose>
+                </article>
+
+                <p
+                    class="border-base-300 text-base-content/50 mt-14 border-t pt-6 text-xs italic"
+                >
+                    We paid for everything here ourselves — no sponsorships, no affiliate kickbacks.
+                    Just our own receipts.
+                </p>
+            </div>
         </main>
 
         <aside class="hidden shrink-0 lg:block lg:w-72">
             <div class="h-20"></div>
-            <div class="sticky top-8">
-                <h2
-                    class="text-base-content/50 mb-4 pl-4 text-xs font-bold tracking-wider uppercase"
-                >
-                    On this page
-                </h2>
+            <div class="sticky top-24">
+                <h2 class="eyebrow text-base-content/45 mb-4 pl-4 text-[0.7rem]">On this page</h2>
                 <TableOfContents headings={headings} />
             </div>
         </aside>

@@ -17,6 +17,14 @@ const blog = defineCollection({
             tags: z.array(z.string()).optional(),
             slug: z.string().optional(),
             mood: z.string().optional(),
+            updated: z.date().optional(),
+            // --- optional "review" fields: drive the verdict receipt ---
+            verdict: z.string().optional(),
+            recommend: z.enum(['yes', 'no', 'maybe']).optional(),
+            rating: z.number().min(0).max(5).optional(),
+            cost: z.string().optional(),
+            pros: z.array(z.string()).optional(),
+            cons: z.array(z.string()).optional(),
         }),
 })
 

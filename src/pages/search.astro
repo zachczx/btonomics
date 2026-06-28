@@ -57,8 +57,9 @@ import Layout from '../layouts/Layout.astro'
         border: #d6d6d6 solid 1px !important;
     }
 
-    .pagefind-ui__search-input:active {
-        border: #38bdf8 solid 2px !important;
+    .pagefind-ui__search-input:active,
+    .pagefind-ui__search-input:focus {
+        border: var(--color-primary) solid 2px !important;
     }
     .pagefind-ui__search-input::placeholder {
         color: #d6d6d6 !important;

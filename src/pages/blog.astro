@@ -1,41 +1,47 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import PostList from '../components/PostList.astro'
+import PostCard from '../components/PostCard.astro'
 import { CleanAndSort } from '../lib/utils'
 import type { CollectionEntry } from 'astro:content'
 
-// Group posts by category
 const allPosts = await CleanAndSort()
 const postsByCategory = allPosts.reduce((acc: Record<string, CollectionEntry<'blog'>[]>, post) => {
     const category = post.data.category || 'Uncategorized'
-    if (!acc[category]) {
-        acc[category] = []
-    }
+    if (!acc[category]) acc[category] = []
     acc[category].push(post)
     return acc
 }, {})
 
-// Sort categories alphabetically
 const sortedCategories = Object.keys(postsByCategory).sort()
 ---
 
 <Layout title="Blog">
-    <div class="mt-8">
-        <h1 class="text-primary mb-8 text-center text-4xl font-bold">All Blog Posts</h1>
+    <div class="mb-12">
+        <p class="eyebrow text-secondary mb-3 text-xs">{allPosts.length} posts and counting</p>
+        <h1 class="text-base-content font-serif text-5xl font-black md:text-6xl">Every Post</h1>
+        <p class="text-base-content/65 mt-3 max-w-2xl text-lg">
+            The whole renovation diary — wins, regrets, and receipts — sorted by topic.
+        </p>
+    </div>
 
+    <div class="space-y-16">
         {
             sortedCategories.map((category) => (
-                <div class="mb-12">
-                    <h2 class="text-primary text-2xl font-bold capitalize">
-                        {category.replace(/-/g, ' ')}
-                    </h2>
-                    <PostList
-                        posts={postsByCategory[category]}
-                        title=""
-                        url=""
-                        id={`category-${category}`}
-                    />
-                </div>
+                <section>
+                    <div class="border-base-300 mb-6 flex items-baseline justify-between border-b pb-3">
+                        <h2 class="text-base-content font-serif text-2xl font-bold capitalize md:text-3xl">
+                            {category.replace(/-/g, ' ')}
+                        </h2>
+                        <span class="ledger text-base-content/45 text-xs">
+                            {postsByCategory[category].length}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {postsByCategory[category].map((post) => (
+                            <PostCard post={post} />
+                        ))}
+                    </div>
+                </section>
             ))
         }
     </div>
