@@ -82,10 +82,20 @@ Retired the second, tag-driven "topical" category set (it was typo-ridden — `A
 ### Known issues / next
 
 - ~~Search broken by the astro-pagefind v2 API change~~ **Fixed.** `search.astro` now uses v2 (`@pagefind/component-ui`): `<PagefindConfig />` bootstraps the web components and we compose `<pagefind-input>` / `<pagefind-summary>` / `<pagefind-results>` inline for a full-page experience, themed via the `--pf-*` custom properties. `astro check` is back to 0 errors.
-- Optional: sort controls (newest / rating / cost) on listings — needs client JS on the static pages.
-- Optional: a Reviews hub filtered by Win/Fail + recommend, sorted by rating/cost (leverages the new review metadata).
+- ~~Sort controls on listings~~ **Done** (see engagement pass below).
+- ~~A Reviews hub filtered by Win/Fail, sorted by rating~~ **Done** — `/verdicts`.
+- ~~Post-page breadcrumb shows the raw `category` vs the nav label~~ **Done** — now shows the display name.
 - Mobile polish pass across all surfaces (spot-check; nothing flagged so far).
-- Post-page breadcrumb shows the raw `category` ("Honest Reviews") vs the nav label ("Reviews") — minor; align if desired.
+- Cost is intentionally **not** a sort key: the field is free-text and non-comparable (`$3,800` vs `$8 per bowl` vs `SGD 4 per frame`). Sort offers Newest / Oldest / Highest-rated only.
+
+### Engagement & browse pass — done
+
+- `src/lib/utils.ts` — `getRelatedPosts()` (same-category → shared-tag overlap → recency fallback).
+- `src/pages/[category]/[id].astro` — "Keep reading" related-posts grid at the end of every post; collapsible mobile TOC (`<details>`, `lg:hidden`); ~200wpm read-time in the byline; breadcrumb shows the category display name.
+- `src/components/PostCard.astro` — Win/Fail corner badge on the image (mood is 100% populated); `data-date`/`-rating`/`-mood` for client sort/filter.
+- `src/components/PostGrid.astro` — **new.** Client-enhanced grid: Newest/Oldest/Highest-rated sort + optional All/Wins/Fails mood filter; re-inits on `astro:page-load` (client-router safe). Used by category listings (sort) and `/verdicts` (sort + filter).
+- `src/pages/verdicts.astro` — **new.** Cross-category hub of every post with a rating/verdict (defaults to highest-rated), with count + avg-rating stat line. Linked from navbar, footer, and the home honest-truth section.
+- `src/components/TableOfContents.astro` — script re-runs on `astro:page-load`, mirrors active state across both TOC copies (mobile + desktop), and scopes heading observation to the prose body.
 
 ### Cleanup — done
 
