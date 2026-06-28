@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from 'astro'
 import Layout from '../../layouts/Layout.astro'
 import PostCard from '../../components/PostCard.astro'
+import SectionHeading from '../../components/SectionHeading.astro'
 import { getCollection } from 'astro:content'
 import { GetUniqueTags, getRelatedTags } from '../../lib/utils'
 
@@ -30,12 +31,12 @@ const { tag } = Astro.params
             <span class="text-ink/80">Tag</span>
         </nav>
 
-        <p class="eyebrow text-primary mb-3 text-xs">
-            {`${filtered.length} ${filtered.length === 1 ? 'post tagged' : 'posts tagged'}`}
-        </p>
-        <h1 class="text-ink font-heading text-5xl font-extrabold md:text-6xl">
-            <span class="text-ink/30">#</span>{tag}
-        </h1>
+        <SectionHeading
+            level="h1"
+            title={`#${tag}`}
+            note={`${filtered.length} ${filtered.length === 1 ? 'post' : 'posts'} tagged`}
+            class="mb-0"
+        />
 
         {
             related.length > 0 && (

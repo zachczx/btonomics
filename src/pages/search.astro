@@ -1,13 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import PagefindConfig from 'astro-pagefind/components/PagefindConfig.astro'
+import SectionHeading from '../components/SectionHeading.astro'
 ---
 
 <Layout title="Search">
     <div class="mb-8">
-        <p class="eyebrow text-primary mb-3 text-xs">Look it up</p>
-        <h1 class="text-ink font-heading text-5xl font-extrabold md:text-6xl">Search</h1>
-        <p class="text-ink/65 mt-3 max-w-xl text-lg">
+        <SectionHeading level="h1" title="Search" class="mb-4" />
+        <p class="text-ink/65 max-w-xl text-lg">
             Find a post by room, material, brand, or the mistake you're trying not to repeat.
         </p>
     </div>

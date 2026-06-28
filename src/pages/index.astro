@@ -7,6 +7,7 @@ import vision from '../images/3_concept1_header-topaz-enhance-4x.webp'
 import reality from '../images/36_upload_IMG_20180730_204953_header.jpg'
 import { categories } from '../data/categories'
 import CategorySwatch from '../components/CategorySwatch.astro'
+import SectionHeading from '../components/SectionHeading.astro'
 
 import CryingEmoji from '~icons/noto/loudly-crying-face'
 import Party from '~icons/noto/party-popper'
@@ -166,20 +167,12 @@ categories.forEach((cat) => {
         (regretPost || worthItPost) && (
             <section class="bg-base-100 py-16 md:py-20">
                 <div class="container mx-auto px-4">
-                    <div class="mb-9 flex flex-wrap items-end justify-between gap-2">
-                        <div>
-                            <span class="eyebrow text-primary text-[0.7rem]">
-                                Receipts don't lie
-                            </span>
-                            <h2 class="text-ink mt-2 text-4xl font-extrabold">The honest truth</h2>
-                        </div>
-                        <a
-                            href="/verdicts"
-                            class="text-secondary inline-flex items-center gap-1 font-semibold hover:underline"
-                        >
-                            See all verdicts →
-                        </a>
-                    </div>
+                    <SectionHeading
+                        title="The honest truth"
+                        note={`${verdictCount} verdicts on record`}
+                        action={{ href: '/verdicts', label: 'See all verdicts' }}
+                        class="mb-9"
+                    />
                     <div class="grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
                         {regretPost && (
                             <a
@@ -318,10 +311,11 @@ categories.forEach((cat) => {
     <!-- ============ FIND WHAT YOU NEED, search + browse ============ -->
     <section class="bg-paper py-16 md:py-20">
         <div class="container mx-auto px-4">
-            <div class="mb-8">
-                <span class="eyebrow text-primary text-[0.7rem]">Find your rabbit hole</span>
-                <h2 class="text-ink mt-2 text-4xl font-extrabold">Search the diary</h2>
-            </div>
+            <SectionHeading
+                title="Search the diary"
+                note={`${postCount} posts indexed`}
+                class="mb-8"
+            />
 
             <a
                 href="/search"
@@ -375,17 +369,12 @@ categories.forEach((cat) => {
     <!-- ============ LATEST ============ -->
     <section class="bg-base-100 py-16 md:py-20">
         <div class="container mx-auto px-4">
-            <div class="mb-8 flex flex-wrap items-end justify-between gap-2">
-                <div>
-                    <span class="eyebrow text-primary text-[0.7rem]">Fresh off the to-do list</span>
-                    <h2 class="text-ink mt-2 text-4xl font-extrabold">Latest happenings</h2>
-                </div>
-                <a
-                    href="/blog"
-                    class="text-secondary inline-flex items-center gap-1 font-semibold hover:underline"
-                    >See all →</a
-                >
-            </div>
+            <SectionHeading
+                title="Latest happenings"
+                note={`${latestPosts.length} most recent`}
+                action={{ href: '/blog', label: 'See all' }}
+                class="mb-8"
+            />
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {latestPosts.map((post) => <PostCard post={post} />)}
             </div>

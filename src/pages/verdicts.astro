@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import PostGrid from '../components/PostGrid.astro'
+import SectionHeading from '../components/SectionHeading.astro'
 import { CleanAndSort } from '../lib/utils'
 
 const allPosts = await CleanAndSort()
@@ -21,11 +22,8 @@ const failCount = rated.filter((p) => p.data.mood === 'negative').length
     description="Every product and vendor we put a real rating on, the wins, the regrets, and what we'd actually buy again. No sponsors, no affiliate kickbacks."
 >
     <div class="mb-10">
-        <span class="eyebrow text-primary text-xs">Receipts don't lie</span>
-        <h1 class="text-base-content font-heading mt-2 text-5xl font-extrabold md:text-6xl">
-            The verdicts
-        </h1>
-        <p class="text-base-content/65 mt-3 max-w-2xl text-lg">
+        <SectionHeading level="h1" title="The verdicts" class="mb-4" />
+        <p class="text-base-content/65 max-w-2xl text-lg">
             Everything we put a real rating on, the stuff worth your money and the stuff that
             wasn't. No sponsors, no affiliate kickbacks, just our own receipts.
         </p>

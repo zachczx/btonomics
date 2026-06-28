@@ -111,7 +111,19 @@ cards, (5) trailing "→" link arrows + coral-on-hover heading swaps.
   colour block with a darker bottom band, like a real paint sample). 5-colour
   palette: coral / teal / marigold / blueprint-blue `#37658a` / ink. Touches the
   navbar Browse dropdown, the home category cards, and the category page header +
-  switcher. (The home Win/Fail *feature* cards still use noto emoji on purpose.)
+  switcher. (The home Win/Fail _feature_ cards still use noto emoji on purpose.)
+
+- **#2 Section headers — done.** The coral-eyebrow → big-bold-heading unit was
+  replaced with `src/components/SectionHeading.astro`: a bold heading over a
+  hairline **dimension line** (end-ticks + rule, the architect's "measure"), with
+  the former kicker demoted to a small ink annotation — and, where natural, made
+  factual ("16 verdicts on record", "50 posts indexed", "6 most recent") instead
+  of cutesy. Optional action link uses an SVG arrow icon (not a text "→") with a
+  subtle hover nudge. Applied to home (×3), `/verdicts`, `/blog`, `/about-us`,
+  `/search`, `/tag/[tag]`, and the post "Keep reading" header; the category
+  "Keep browsing" label was de-coralled. ReviewSummary's card labels keep their
+  semantic coral/teal (pros = teal, cons = coral) — they are not section headers.
+  (The hero before/after "→" badge is left as-is; it's the documented signature.)
 
 ### Cleanup — done
 

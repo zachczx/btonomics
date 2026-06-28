@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import PostCard from '../components/PostCard.astro'
+import SectionHeading from '../components/SectionHeading.astro'
 import { CleanAndSort } from '../lib/utils'
 import type { CollectionEntry } from 'astro:content'
 
@@ -17,11 +18,13 @@ const sortedCategories = Object.keys(postsByCategory).sort()
 
 <Layout title="Blog">
     <div class="mb-12">
-        <p class="eyebrow text-primary mb-3 text-xs">{allPosts.length} posts and counting</p>
-        <h1 class="text-base-content font-heading text-5xl font-extrabold md:text-6xl">
-            Every post
-        </h1>
-        <p class="text-base-content/65 mt-3 max-w-2xl text-lg">
+        <SectionHeading
+            level="h1"
+            title="Every post"
+            note={`${allPosts.length} posts and counting`}
+            class="mb-4"
+        />
+        <p class="text-base-content/65 max-w-2xl text-lg">
             The whole renovation diary, wins, regrets, and receipts, sorted by topic.
         </p>
     </div>

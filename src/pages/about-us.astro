@@ -2,6 +2,7 @@
 import '../styles/global.css'
 import Layout from '../layouts/Layout.astro'
 import Prose from '../components/Prose.astro'
+import SectionHeading from '../components/SectionHeading.astro'
 import aboutPic from '../images/20161126_105337.webp'
 import floorPlan from '../data/blog/renovation/our-clean-bto-home-design/concept0.5.png'
 import { Picture } from 'astro:assets'
@@ -9,9 +10,8 @@ import { Picture } from 'astro:assets'
 
 <Layout title="About Us">
     <div class="mb-12">
-        <p class="eyebrow text-primary mb-3 text-xs">Two homeowners, one budget</p>
-        <h1 class="text-ink font-heading text-5xl font-extrabold md:text-6xl">About us</h1>
-        <p class="text-ink/65 mt-3 max-w-2xl text-lg">
+        <SectionHeading level="h1" title="About us" class="mb-4" />
+        <p class="text-ink/65 max-w-2xl text-lg">
             The couple behind the receipts, and why we write all this down.
         </p>
     </div>

@@ -1,0 +1,63 @@
+---
+// Section/page header in the architect's-drawing language: a bold heading over a
+// hairline "dimension line" (end-ticks + rule), with the former coral kicker
+// demoted to a small ink annotation below — like a measured note on a drawing.
+interface Props {
+    title: string
+    /** small annotation under the rule (a factual note reads better than a kicker) */
+    note?: string
+    /** heading size */
+    level?: 'h1' | 'h2'
+    /** optional action aligned with the heading */
+    action?: { href: string; label: string }
+    /** wrapper spacing override */
+    class?: string
+}
+const { title, note, level = 'h2', action, class: className = 'mb-8' } = Astro.props
+const Heading = level
+---
+
+<div class:list={[className]}>
+    <div class="flex items-end justify-between gap-4">
+        <Heading
+            class:list={[
+                'font-heading text-ink font-extrabold',
+                level === 'h1' ? 'text-4xl md:text-5xl' : 'text-3xl md:text-4xl',
+            ]}
+        >
+            {title}
+        </Heading>
+        {
+            action && (
+                <a
+                    href={action.href}
+                    class="text-ink/55 hover:text-primary group/action mb-1.5 inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold transition-colors"
+                >
+                    {action.label}
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="transition-transform group-hover/action:translate-x-0.5"
+                        aria-hidden="true"
+                    >
+                        <path d="M5 12h14" />
+                        <path d="m12 5 7 7-7 7" />
+                    </svg>
+                </a>
+            )
+        }
+    </div>
+    <div class="mt-3 flex items-center gap-2" aria-hidden="true">
+        <span class="bg-ink/30 h-2.5 w-px"></span>
+        <span class="bg-ink/15 h-px flex-1"></span>
+        <span class="bg-ink/30 h-2.5 w-px"></span>
+    </div>
+    {note && <p class="text-ink/50 mt-2.5 text-xs font-medium">{note}</p>}
+</div>
