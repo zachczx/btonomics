@@ -111,7 +111,9 @@ cards, (5) trailing "→" link arrows + coral-on-hover heading swaps.
   colour block with a darker bottom band, like a real paint sample). 5-colour
   palette: coral / teal / marigold / blueprint-blue `#37658a` / ink. Touches the
   navbar Browse dropdown, the home category cards, and the category page header +
-  switcher. (The home Win/Fail _feature_ cards still use noto emoji on purpose.)
+  switcher. The home Win/Fail _feature_ cards also dropped their noto emoji pills
+  for the same teal/coral dot + label used on `PostCard` — no emoji left anywhere
+  in the chrome.
 
 - **#2 Section headers — done.** The coral-eyebrow → big-bold-heading unit was
   replaced with `src/components/SectionHeading.astro`: a bold heading over a

@@ -9,9 +9,6 @@ import { categories } from '../data/categories'
 import CategorySwatch from '../components/CategorySwatch.astro'
 import SectionHeading from '../components/SectionHeading.astro'
 
-import CryingEmoji from '~icons/noto/loudly-crying-face'
-import Party from '~icons/noto/party-popper'
-
 const allPosts = await CleanAndSort()
 allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 const latestPosts = allPosts.slice(0, 6)
@@ -192,8 +189,9 @@ categories.forEach((cat) => {
                                         </div>
                                     )}
                                     <div class="p-5">
-                                        <span class="eyebrow bg-error text-error-content inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.6rem]">
-                                            <CryingEmoji /> Fail
+                                        <span class="text-error inline-flex items-center gap-1.5 text-sm font-semibold">
+                                            <span class="bg-error h-2.5 w-2.5 rounded-full" />
+                                            Fail
                                         </span>
                                         <h3 class="text-ink group-hover:text-primary mt-3 text-lg font-bold transition-colors">
                                             {regretPost.data.title}
@@ -256,8 +254,9 @@ categories.forEach((cat) => {
                                         </div>
                                     )}
                                     <div class="p-5">
-                                        <span class="eyebrow bg-secondary text-secondary-content inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.6rem]">
-                                            <Party /> Win
+                                        <span class="text-secondary inline-flex items-center gap-1.5 text-sm font-semibold">
+                                            <span class="bg-secondary h-2.5 w-2.5 rounded-full" />
+                                            Win
                                         </span>
                                         <h3 class="text-ink group-hover:text-secondary mt-3 text-lg font-bold transition-colors">
                                             {worthItPost.data.title}
