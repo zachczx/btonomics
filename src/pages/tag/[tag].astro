@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro'
 import Layout from '../../layouts/Layout.astro'
 import PostCard from '../../components/PostCard.astro'
 import { getCollection } from 'astro:content'
-import { GetUniqueTags } from '../../lib/utils'
+import { GetUniqueTags, getRelatedTags } from '../../lib/utils'
 
 export const getStaticPaths = (async () => {
     const entries = await getCollection('blog')
@@ -13,48 +13,48 @@ export const getStaticPaths = (async () => {
         const filtered = entries
             .filter((entry) => entry.data.tags?.includes(tag))
             .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-        return { params: { tag }, props: { filtered, tagsList } }
+        const related = getRelatedTags(entries, tag, 6)
+        return { params: { tag }, props: { filtered, related } }
     })
 }) satisfies GetStaticPaths
 
-const { filtered, tagsList } = Astro.props
+const { filtered, related } = Astro.props
 const { tag } = Astro.params
 ---
 
 <Layout title={`#${tag}`}>
-    <div class="mb-12" data-pagefind-ignore>
-        <!-- Header -->
-        <div class="mb-8">
-            <p class="eyebrow text-primary mb-3 text-xs">
-                {`${filtered.length} ${filtered.length === 1 ? 'post tagged' : 'posts tagged'}`}
-            </p>
-            <h1 class="text-base-content font-heading text-5xl font-extrabold md:text-6xl">
-                <span class="text-base-content/35">#</span>{tag}
-            </h1>
-        </div>
+    <div class="mb-10" data-pagefind-ignore>
+        <nav class="text-ink/55 mb-5 text-sm">
+            <a href="/" class="hover:text-primary transition-colors">Home</a>
+            <span class="mx-2 opacity-40">/</span>
+            <span class="text-ink/80">Tag</span>
+        </nav>
 
-        <!-- Tag cloud -->
-        <div class="mb-12 flex flex-wrap gap-2">
-            {
-                tagsList.map((t) => (
-                    <a
-                        href={`/tag/${t}`}
-                        class:list={[
-                            'rounded-full border px-3.5 py-1.5 text-sm transition-all duration-200',
-                            t === tag
-                                ? 'border-secondary bg-secondary text-secondary-content font-semibold'
-                                : 'border-base-300 text-base-content/70 hover:border-secondary hover:text-secondary',
-                        ]}
-                    >
-                        {t}
-                    </a>
-                ))
-            }
-        </div>
+        <p class="eyebrow text-primary mb-3 text-xs">
+            {`${filtered.length} ${filtered.length === 1 ? 'post tagged' : 'posts tagged'}`}
+        </p>
+        <h1 class="text-ink font-heading text-5xl font-extrabold md:text-6xl">
+            <span class="text-ink/30">#</span>{tag}
+        </h1>
 
-        <!-- Posts -->
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((entry) => <PostCard post={entry} />)}
-        </div>
+        {
+            related.length > 0 && (
+                <div class="mt-6 flex flex-wrap items-center gap-2">
+                    <span class="eyebrow text-ink/40 text-[0.62rem]">Often appears with</span>
+                    {related.map((t) => (
+                        <a
+                            href={`/tag/${t}`}
+                            class="border-base-300 text-ink/70 hover:border-secondary hover:text-secondary rounded-full border px-3 py-1 text-sm transition-colors"
+                        >
+                            {t}
+                        </a>
+                    ))}
+                </div>
+            )
+        }
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {filtered.map((entry) => <PostCard post={entry} />)}
     </div>
 </Layout>

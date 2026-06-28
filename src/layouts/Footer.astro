@@ -1,4 +1,5 @@
 ---
+import { categories } from '../data/categories'
 const year = new Date().getFullYear()
 ---
 
@@ -24,32 +25,27 @@ const year = new Date().getFullYear()
                     <a href="/" class="text-neutral-content/75 hover:text-primary transition-colors"
                         >Home</a
                     >
-                    <a
-                        href="/honest-reviews"
-                        class="text-neutral-content/75 hover:text-primary transition-colors"
-                        >Honest Reviews</a
-                    >
-                    <a
-                        href="/renovation"
-                        class="text-neutral-content/75 hover:text-primary transition-colors"
-                        >Renovation</a
-                    >
-                    <a
-                        href="/shopping"
-                        class="text-neutral-content/75 hover:text-primary transition-colors"
-                        >Shopping</a
-                    >
-                    <a
-                        href="/maintenance"
-                        class="text-neutral-content/75 hover:text-primary transition-colors"
-                        >Maintenance</a
-                    >
+                    {
+                        categories.map((cat) => (
+                            <a
+                                href={`/${cat.slug}`}
+                                class="text-neutral-content/75 hover:text-primary transition-colors"
+                            >
+                                {cat.name}
+                            </a>
+                        ))
+                    }
                 </nav>
             </div>
 
             <div>
                 <h3 class="eyebrow text-neutral-content/50 mb-3 text-[0.68rem]">More</h3>
                 <nav class="flex flex-col gap-2 text-sm">
+                    <a
+                        href="/blog"
+                        class="text-neutral-content/75 hover:text-primary transition-colors"
+                        >All posts</a
+                    >
                     <a
                         href="/about-us"
                         class="text-neutral-content/75 hover:text-primary transition-colors"

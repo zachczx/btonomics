@@ -2,97 +2,88 @@
 import Layout from '../../layouts/Layout.astro'
 import PostCard from '../../components/PostCard.astro'
 import { getCollection } from 'astro:content'
-import { categories } from '../../data/categories'
+import { categories, getCategoryBySlug } from '../../data/categories'
+import { getCategorySlug } from '../../lib/utils'
 
 export async function getStaticPaths() {
-    const { categories } = await import('../../data/categories')
-
-    const newPaths = categories.map((c) => ({ params: { category: c.slug } }))
-    const oldPaths = [
-        { params: { category: 'shopping' } },
-        { params: { category: 'honest-reviews' } },
-        { params: { category: 'general' } },
-        { params: { category: 'renovation' } },
-        { params: { category: 'maintenance' } },
-    ]
-
-    return [...newPaths, ...oldPaths]
+    return categories.map((c) => ({ params: { category: c.slug } }))
 }
 
 const { category } = Astro.params
-const matchedCategory = categories.find((c) => c.slug === category)
+const cat = getCategoryBySlug(category!)!
+const Icon = cat.icon
 
-function StringtoParam(string: string) {
-    return string.toLowerCase().replace(' ', '-')
-}
+const posts = await getCollection('blog', ({ data }) => getCategorySlug(data.category) === category)
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 
-const posts = await getCollection('blog', ({ data }) => {
-    if (matchedCategory) {
-        const catTags = matchedCategory.tags.map((t) => t.toLowerCase())
-        const postTags = (data.tags || []).map((t) => t.toLowerCase())
-        return postTags.some((t) => catTags.includes(t))
-    }
-    return StringtoParam(data.category) === category
-})
-
-posts.sort((a, b) => {
-    if (a.data.pubDate && b.data.pubDate) {
-        return b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-    }
-    return 0
-})
-
-let pageTitle = ''
-let pageDesc = ''
-
-if (matchedCategory) {
-    pageTitle = matchedCategory.name
-    pageDesc = matchedCategory.description
-} else {
-    if (category === 'honest-reviews') pageTitle = 'Honest Reviews'
-    else if (category === 'shopping') pageTitle = 'Shopping'
-    else if (category === 'general') pageTitle = 'General'
-    else if (category === 'maintenance') pageTitle = 'Maintenance'
-    else if (category === 'renovation') pageTitle = 'Renovation'
-    pageDesc = `Browse all ${pageTitle.toLowerCase()} articles`
-}
+const others = categories.filter((c) => c.slug !== category)
 ---
 
-<Layout title={pageTitle}>
-    <div class="mb-16">
-        <!-- Header -->
-        <div class="mb-10">
-            <nav class="mb-4 text-sm">
-                <a href="/" class="text-base-content/60 hover:text-primary transition-colors"
-                    >Home</a
-                >
-                <span class="text-base-content/40 mx-2">/</span>
-                <span class="text-base-content/80 capitalize">{pageTitle}</span>
-            </nav>
-            <p class="eyebrow text-primary mb-3 text-xs">
-                {`${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`}
-            </p>
-            <h1 class="text-base-content font-heading text-5xl font-extrabold md:text-6xl">
-                {pageTitle}
-            </h1>
-            <p class="text-base-content/65 mt-3 max-w-2xl text-lg">
-                {pageDesc}
-            </p>
-        </div>
+<Layout title={cat.name}>
+    <!-- Identity header -->
+    <div class="mb-10">
+        <nav class="text-ink/55 mb-5 text-sm">
+            <a href="/" class="hover:text-primary transition-colors">Home</a>
+            <span class="mx-2 opacity-40">/</span>
+            <span class="text-ink/80">{cat.name}</span>
+        </nav>
 
-        <!-- Posts grid -->
-        {
-            posts.length > 0 ? (
-                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {posts.map((entry) => (
-                        <PostCard post={entry} />
-                    ))}
+        <div class="flex items-start gap-4">
+            <span
+                class={`${cat.tintBg} flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl`}
+            >
+                <Icon />
+            </span>
+            <div>
+                <div class="flex items-center gap-3">
+                    <h1 class="text-ink font-heading text-4xl font-extrabold md:text-5xl">
+                        {cat.name}
+                    </h1>
+                    <span class={`eyebrow ${cat.tintBg} ${cat.tintText} rounded-full px-2.5 py-1`}>
+                        {posts.length}
+                        {posts.length === 1 ? 'post' : 'posts'}
+                    </span>
                 </div>
-            ) : (
-                <div class="border-base-300 text-base-content/50 rounded-lg border border-dashed py-16 text-center">
-                    No posts in this topic yet.
-                </div>
-            )
-        }
+                <p class="text-ink/65 mt-2 max-w-2xl text-lg">{cat.description}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Posts -->
+    {
+        posts.length > 0 ? (
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {posts.map((entry) => (
+                    <PostCard post={entry} />
+                ))}
+            </div>
+        ) : (
+            <div class="border-base-300 bg-base-200 text-ink/55 rounded-2xl border px-6 py-14 text-center">
+                Nothing here yet — check back soon.
+            </div>
+        )
+    }
+
+    <!-- Switch category -->
+    <div class="border-base-300 mt-16 border-t pt-8">
+        <span class="eyebrow text-primary text-[0.7rem]">Keep browsing</span>
+        <div class="mt-4 flex flex-wrap gap-3">
+            {
+                others.map((c) => {
+                    const OtherIcon = c.icon
+                    return (
+                        <a
+                            href={`/${c.slug}`}
+                            class="border-base-300 hover:border-ink/30 group inline-flex items-center gap-2.5 rounded-full border px-4 py-2.5 transition-colors"
+                        >
+                            <span class={`${c.tintBg} rounded-md p-1 text-base`}>
+                                <OtherIcon />
+                            </span>
+                            <span class="text-ink font-semibold">{c.name}</span>
+                        </a>
+                    )
+                })
+            }
+        </div>
     </div>
 </Layout>

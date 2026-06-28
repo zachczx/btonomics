@@ -65,9 +65,27 @@ Bright, friendly, approachable — **but intentional and grounded in the subject
 - `src/pages/search.astro` — V3 header + Pagefind UI on tokens (Hanken font, readable ink excerpts, coral hover, pill input, focus ring).
 - `src/pages/about-us.astro` — V3 listing-style header.
 
-### To do
+### IA / navigation rework — done (consolidated on legacy categories)
 
+Retired the second, tag-driven "topical" category set (it was typo-ridden — `Anyth`, `Mistakle`, `Nippon` — and left 30% of posts uncovered while `furniture-decor` caught 46%). One browse axis now: the 5 real categories.
+
+- `src/data/categories.ts` — now the 5 legacy categories (Renovation, Reviews, Shopping, Maintenance, General) with `slug`/`name`/`category`/`icon`/`description`/tint + `getCategoryBySlug`.
+- `src/lib/utils.ts` — `getCategorySlug` matches the canonical `category`; added `STRUCTURAL_TAGS` + `getRelatedTags` for code-level tag curation (no post edits).
+- `src/pages/[category]/index.astro` — emits only the 5 slugs; identity header (icon + tint band), count, breadcrumb, friendly empty state, "keep browsing" switcher.
+- `src/pages/index.astro` — "Browse by category" cards with real per-category counts (was broken tag-intersection).
+- `src/components/Navbar.astro` — **Browse** dropdown of the 5 categories (desktop + mobile); "Blog" → "All posts".
+- `src/layouts/Footer.astro` — Browse column maps the 5 categories (added missing General).
+- `src/pages/tag/[tag].astro` — dropped the global 50-chip cloud; now count + "often appears with" related tags + grid.
+- Fixed one post's `category: 'general'` → `'General'` casing.
+- Build: 115 → 109 pages (6 topical routes removed).
+
+### Known issues / next
+
+- ~~Search broken by the astro-pagefind v2 API change~~ **Fixed.** `search.astro` now uses v2 (`@pagefind/component-ui`): `<PagefindConfig />` bootstraps the web components and we compose `<pagefind-input>` / `<pagefind-summary>` / `<pagefind-results>` inline for a full-page experience, themed via the `--pf-*` custom properties. `astro check` is back to 0 errors.
+- Optional: sort controls (newest / rating / cost) on listings — needs client JS on the static pages.
+- Optional: a Reviews hub filtered by Win/Fail + recommend, sorted by rating/cost (leverages the new review metadata).
 - Mobile polish pass across all surfaces (spot-check; nothing flagged so far).
+- Post-page breadcrumb shows the raw `category` ("Honest Reviews") vs the nav label ("Reviews") — minor; align if desired.
 
 ### Cleanup — done
 

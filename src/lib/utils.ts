@@ -18,19 +18,42 @@ export async function GetUniqueTags(posts: CollectionEntry<'blog'>[]) {
     return [...new Set(tags)].sort()
 }
 
+/** Tags too broad or structural to be useful as browse facets. */
+export const STRUCTURAL_TAGS = new Set(
+    ['BTO', 'Guide', 'Renovation', 'Shopping', 'Maintenance', 'Preparation', 'Thoughts'].map((t) =>
+        t.toLowerCase(),
+    ),
+)
+
+/** Tags that co-occur with `tag` across the collection, most-frequent first, excluding structural tags. */
+export function getRelatedTags(posts: CollectionEntry<'blog'>[], tag: string, limit = 6): string[] {
+    const counts: Record<string, number> = {}
+    for (const post of posts) {
+        const tags = post.data.tags || []
+        if (!tags.includes(tag)) continue
+        for (const t of tags) {
+            if (t === tag || STRUCTURAL_TAGS.has(t.toLowerCase())) continue
+            counts[t] = (counts[t] || 0) + 1
+        }
+    }
+    return Object.entries(counts)
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, limit)
+        .map(([t]) => t)
+}
+
 import { categories } from '../data/categories'
 
 export function getCategorySlug(categoryName: string): string {
-    // 1. Try to find strict match in defined categories
+    const key = categoryName.toLowerCase()
+    // 1. Match against a defined category by canonical name, display name, or slug
     const found = categories.find(
-        (c) =>
-            c.name.toLowerCase() === categoryName.toLowerCase() ||
-            c.slug === categoryName.toLowerCase(),
+        (c) => c.category.toLowerCase() === key || c.name.toLowerCase() === key || c.slug === key,
     )
     if (found) return found.slug
 
-    // 2. Fallback to legacy kebab-case
-    return categoryName.toLowerCase().replace(' ', '-')
+    // 2. Fallback to kebab-case for anything not in categories.ts
+    return key.replace(/\s+/g, '-')
 }
 
 export async function CleanAndSort() {

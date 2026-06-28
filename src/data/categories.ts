@@ -1,58 +1,77 @@
-import IconPalette from '~icons/noto/artist-palette'
 import IconHammer from '~icons/noto/hammer'
-import IconBulb from '~icons/noto/light-bulb'
-import IconFaucet from '~icons/noto/potable-water'
-import IconWorker from '~icons/noto/construction-worker'
-import IconChair from '~icons/noto/chair'
+import IconStar from '~icons/noto/star'
+import IconCart from '~icons/noto/shopping-cart'
+import IconWrench from '~icons/noto/wrench'
+import IconThinking from '~icons/noto/thinking-face'
 
-import Flooring from './blog/honestReviews/floor-xpert-lurf-review-great-value-money-after-sales-service/IMG_20180730_211142-742x1024.jpg'
-import Tap from './blog/honestReviews/4-room-bto-design-completed-home/upload_IMG_20181220_203422.jpg'
-import Fan from './blog/honestReviews/taobao-ceiling-fan-review-noisy-sucks-but-pretty/IMG_20180612_194459-1024x768.jpg'
-import Cabinet from './blog/honestReviews/4-room-bto-design-completed-home/upload_IMG_20180730_211743.jpg'
-import Renovation from './blog/renovation/having-hdb-do-cement-screeding-for-our-bto-home/IMG-20180321-WA0001-768x1024.jpg'
-import Painting from './blog/renovation/getting-nippon-paint-repaint-moldy-home/PXL_20251228_030322829.webp'
+export interface Category {
+    /** URL slug — also the value posts get after getCategorySlug() */
+    slug: string
+    /** display name (nav, headers) */
+    name: string
+    /** canonical `category` value in post frontmatter */
+    category: string
+    icon: typeof IconHammer
+    description: string
+    /** soft tint for the category header band + chips */
+    tintBg: string
+    tintText: string
+}
 
-export const categories = [
+export const categories: Category[] = [
     {
-        slug: 'painting-walls',
-        name: 'Painting & Walls',
-        icon: Painting,
-        description: 'Mold treatment, paint selection, and wall repairs',
-        tags: ['Mold', 'Paint', 'Fungal', 'Cement', 'Nippon'],
+        slug: 'renovation',
+        name: 'Renovation',
+        category: 'Renovation',
+        icon: IconHammer,
+        description:
+            'The messy middle — hacking, screeding, wet works, painting, and the trades who did it.',
+        tintBg: 'bg-softcoral',
+        tintText: 'text-primary',
     },
     {
-        slug: 'flooring',
-        name: 'Flooring',
-        icon: Flooring,
-        description: 'Vinyl, tiling, and floor protection',
-        tags: ['Vinyl', 'Floor', 'Anyth', 'Bed'],
+        slug: 'honest-reviews',
+        name: 'Reviews',
+        category: 'Honest Reviews',
+        icon: IconStar,
+        description:
+            'No-sponsor verdicts on the stuff we actually bought and the vendors we actually hired.',
+        tintBg: 'bg-softteal',
+        tintText: 'text-secondary',
     },
     {
-        slug: 'electrical-lighting',
-        name: 'Electrical & Lighting',
-        icon: Fan,
-        description: 'Wiring, fans, aircon, and appliances',
-        tags: ['Electronics', 'Fan', 'Hood', 'Elmark', 'Aircon'],
+        slug: 'shopping',
+        name: 'Shopping',
+        category: 'Shopping',
+        icon: IconCart,
+        description:
+            'Where to buy, what to skip, and how not to overpay — Taobao, IKEA, and everything in between.',
+        tintBg: 'bg-softmarigold',
+        tintText: 'text-accent-content',
     },
     {
-        slug: 'kitchen-bath',
-        name: 'Kitchen & Bath',
-        icon: Tap,
-        description: 'Cabinetry, plumbing, and usage reviews',
-        tags: ['Cabinet', 'Laundry', 'Kitchen', 'Baton', 'LLHF'],
+        slug: 'maintenance',
+        name: 'Maintenance',
+        category: 'Maintenance',
+        icon: IconWrench,
+        description:
+            'Keeping a lived-in HDB running — servicing, cleaning, mould, and the small fixes.',
+        tintBg: 'bg-softteal',
+        tintText: 'text-secondary',
     },
     {
-        slug: 'contractors-reviews',
-        name: 'Contractors & Reviews',
-        icon: Renovation,
-        description: 'ID experiences and contractor workmanship',
-        tags: ['Contractor', 'Maintenance', 'ID', 'Interesting'],
-    },
-    {
-        slug: 'furniture-decor',
-        name: 'Furniture & Decor',
-        icon: Cabinet,
-        description: 'Furnishing, blinds, and styling',
-        tags: ['Frame', 'Furniture', 'Accessories', 'Blinds', 'Mistakle', 'Funny'],
+        slug: 'general',
+        name: 'General',
+        category: 'General',
+        icon: IconThinking,
+        description:
+            'Everything else — the money calls, the neighbours, and the occasional good bowl of noodles.',
+        tintBg: 'bg-softcoral',
+        tintText: 'text-primary',
     },
 ]
+
+/** Look up a category by its URL slug. */
+export function getCategoryBySlug(slug: string): Category | undefined {
+    return categories.find((c) => c.slug === slug)
+}

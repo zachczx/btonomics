@@ -1,5 +1,5 @@
 ---
-
+import { categories } from '../data/categories'
 ---
 
 <header
@@ -15,10 +15,53 @@
         </a>
 
         <div class="hidden items-center gap-1 lg:flex">
+            <div class="dropdown dropdown-hover dropdown-end">
+                <div
+                    tabindex="0"
+                    role="button"
+                    class="text-ink/75 hover:bg-softcoral hover:text-primary inline-flex items-center gap-1 rounded-full px-4 py-2 font-semibold transition-colors"
+                >
+                    Browse
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                        class="opacity-60"
+                    >
+                        <path fill="currentColor" d="m12 15l-5-5h10z"></path>
+                    </svg>
+                </div>
+                <ul
+                    tabindex="0"
+                    class="dropdown-content border-base-300 bg-base-100 rounded-box z-[1] mt-2 w-60 border p-2 shadow-lg"
+                >
+                    {
+                        categories.map((cat) => {
+                            const Icon = cat.icon
+                            return (
+                                <li>
+                                    <a
+                                        href={`/${cat.slug}`}
+                                        class="hover:bg-base-200 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors"
+                                    >
+                                        <span
+                                            class={`${cat.tintBg} flex h-7 w-7 items-center justify-center rounded-md text-sm`}
+                                        >
+                                            <Icon />
+                                        </span>
+                                        <span class="text-ink font-semibold">{cat.name}</span>
+                                    </a>
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
+            </div>
             <a
                 href="/blog"
                 class="text-ink/75 hover:bg-softcoral hover:text-primary rounded-full px-4 py-2 font-semibold transition-colors"
-                >Blog</a
+                >All posts</a
             >
             <a
                 href="/about-us"
@@ -64,9 +107,18 @@
             </div>
             <ul
                 tabindex="0"
-                class="menu menu-sm dropdown-content border-base-300 bg-base-100 rounded-box z-[1] mt-3 w-44 border p-2 shadow-lg"
+                class="menu menu-sm dropdown-content border-base-300 bg-base-100 rounded-box z-[1] mt-3 w-52 border p-2 shadow-lg"
             >
-                <li><a href="/blog">Blog</a></li>
+                <li class="menu-title text-ink/40">Browse</li>
+                {
+                    categories.map((cat) => (
+                        <li>
+                            <a href={`/${cat.slug}`}>{cat.name}</a>
+                        </li>
+                    ))
+                }
+                <li><div class="bg-base-300 my-1 h-px"></div></li>
+                <li><a href="/blog">All posts</a></li>
                 <li><a href="/search">Search</a></li>
                 <li><a href="/about-us">About</a></li>
             </ul>

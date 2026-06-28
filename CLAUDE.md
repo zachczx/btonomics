@@ -28,22 +28,22 @@ The single `blog` collection (`src/content.config.ts`) loads `src/data/blog/**/[
 Frontmatter schema (Zod, in `content.config.ts`):
 `title`, `pubDate` (date), `category` (string), `author` — required; `description`, `image`, `tags` (string[]), `slug`, `mood` — optional. `mood` is `'positive'` or `'negative'` and drives the homepage Win/Fail cards.
 
-### The two-tier category system (the main thing to understand)
+### The category system (one axis)
 
-There are **two parallel category concepts** and they do not map 1:1:
+There is **one** browse axis: the `category` string in each post's frontmatter — one of `"Renovation"`, `"Honest Reviews"`, `"Shopping"`, `"Maintenance"`, `"General"`. These mirror the on-disk folders (`renovation/`, `honestReviews/`, etc.). A post's **canonical URL is built from its category**: `getCategorySlug(entry.data.category)` resolves it to a slug, so posts live at `/renovation/<slug>`, `/honest-reviews/<slug>`, etc.
 
-1. **Legacy categories** — the `category` string in each post's frontmatter (e.g. `"Renovation"`, `"Shopping"`, `"General"`, `"Maintenance"`, `"Honest Reviews"`). These also mirror the on-disk folder names (`renovation/`, `honestReviews/`, etc.). A post's **canonical URL is built from its legacy category**: `getCategorySlug(entry.data.category)` kebab-cases it, so posts live at `/renovation/<slug>`, `/shopping/<slug>`, etc.
+`src/data/categories.ts` is the single source of truth for those 5 categories — each entry has `slug`, display `name` (e.g. "Honest Reviews" shows as **Reviews**), canonical `category` (the frontmatter value), an `icon`, a `description`, and tint classes. It drives the navbar **Browse** dropdown, the homepage "Browse by category" cards, the footer, and `src/pages/[category]/index.astro` (which `getStaticPaths`-emits exactly these 5 slugs and filters by `getCategorySlug(data.category) === slug`). `getCategorySlug()` and `getCategoryBySlug()` live in `src/lib/utils.ts` / `categories.ts`.
 
-2. **New topical categories** — defined in `src/data/categories.ts` (`painting-walls`, `flooring`, `electrical-lighting`, `kitchen-bath`, `contractors-reviews`, `furniture-decor`). These are **tag-driven**: a post belongs to a new category if its `tags` intersect that category's `tags` list. Used for the homepage "Browse by Topic" grid and the `/<new-slug>` listing pages.
+> Historical note: there used to be a second, tag-driven set of "topical" categories (`painting-walls`, `flooring`, …). It was retired — the tag→category mappings were typo-ridden and left 30% of posts uncovered. See `redesign.md`.
 
-So `src/pages/[category]/index.astro` resolves **both**: it `getStaticPaths`-emits new-category slugs _and_ legacy slugs, filtering by tag-intersection for new categories and by frontmatter `category` for legacy ones. When editing category logic, update `src/data/categories.ts` (tags) and keep the legacy fallback paths in sync. `getCategorySlug()` in `src/lib/utils.ts` is the single source for name→slug resolution (matches a `categories.ts` entry, else kebab-case fallback).
+**Tags** are a secondary facet. There are ~50 of them and most are used once, so the tag UI is curated _in code_, not by editing posts: `STRUCTURAL_TAGS` (in `utils.ts`) hides over-broad tags (BTO, Guide, …) and `getRelatedTags()` powers the "often appears with" row on `/tag/[tag]` (co-occurring tags only — no global tag cloud).
 
 ### Routes
 
-- `/` (`pages/index.astro`) — hero, Win/Fail cards (by `mood`), latest 6 posts, Browse by Topic grid (counts via tag-intersection).
-- `/[category]/` — category listing (new tag-based or legacy).
+- `/` (`pages/index.astro`) — hero, Win/Fail cards (by `mood`), latest 6 posts, Browse-by-category cards (counts by `category`).
+- `/[category]/` — one of the 5 category listings; identity header (icon + tint), count, breadcrumb, post grid, "keep browsing" switcher.
 - `/[category]/[id]` — a post; `id` is the post `slug`. Renders MDX `<Content />` inside `<Prose>` with a sticky `<TableOfContents>` built from `render()` headings.
-- `/tag/[tag]` — posts for a tag, grouped into hardcoded legacy-category sections.
+- `/tag/[tag]` — posts for a tag, with a "often appears with" related-tags row (`getRelatedTags`).
 - `/blog`, `/about-us`, `/search`.
 
 Post-sorting/cleaning helpers live in `src/lib/utils.ts` (`CleanAndSort`, `FilterCleanSort`, `GetUniqueTags`). Note several pages also define their own local `CleanAndSort` inline.
