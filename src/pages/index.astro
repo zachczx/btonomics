@@ -136,37 +136,27 @@ categories.forEach((cat) => {
         </div>
     </section>
 
-    <!-- ============ RECEIPTS — by the numbers ============ -->
-    <section class="bg-neutral text-neutral-content">
-        <div class="container mx-auto grid grid-cols-2 gap-6 px-4 py-10 sm:grid-cols-4 md:py-12">
-            <div>
-                <div class="ledger text-3xl font-extrabold md:text-4xl">{postCount}</div>
-                <div class="eyebrow text-neutral-content/55 mt-1 text-[0.6rem]">
-                    posts &amp; counting
-                </div>
-            </div>
-            <div>
-                <div class="ledger text-3xl font-extrabold md:text-4xl">{yearsDocumented}</div>
-                <div class="eyebrow text-neutral-content/55 mt-1 text-[0.6rem]">
-                    years documented
-                </div>
-            </div>
-            <div>
-                <div class="ledger text-accent text-3xl font-extrabold md:text-4xl">
-                    {verdictCount}
-                </div>
-                <div class="eyebrow text-neutral-content/55 mt-1 text-[0.6rem]">
-                    honest verdicts
-                </div>
-            </div>
-            <div>
-                <div class="ledger text-3xl font-extrabold md:text-4xl">
-                    <span class="text-secondary">{winCount}</span>
-                    <span class="text-neutral-content/30">/</span>
-                    <span class="text-primary">{failCount}</span>
-                </div>
-                <div class="eyebrow text-neutral-content/55 mt-1 text-[0.6rem]">wins / fails</div>
-            </div>
+    <!-- ============ RECEIPTS — warm by-the-numbers strip ============ -->
+    <section class="bg-paper border-base-300 border-y">
+        <div
+            class="container mx-auto flex flex-wrap items-baseline justify-center gap-x-5 gap-y-1.5 px-4 py-5 text-sm sm:gap-x-8"
+        >
+            <span class="ledger text-ink/55">
+                <strong class="text-ink text-lg font-extrabold">{postCount}</strong> posts
+            </span>
+            <span class="text-ink/20" aria-hidden="true">·</span>
+            <span class="ledger text-ink/55">
+                <strong class="text-ink text-lg font-extrabold">{yearsDocumented}</strong> years
+            </span>
+            <span class="text-ink/20" aria-hidden="true">·</span>
+            <span class="ledger text-ink/55">
+                <strong class="text-ink text-lg font-extrabold">{verdictCount}</strong> honest verdicts
+            </span>
+            <span class="text-ink/20" aria-hidden="true">·</span>
+            <span class="ledger text-ink/55">
+                <strong class="text-secondary text-lg font-extrabold">{winCount}</strong> wins /
+                <strong class="text-primary text-lg font-extrabold">{failCount}</strong> fails
+            </span>
         </div>
     </section>
 
