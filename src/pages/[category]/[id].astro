@@ -8,6 +8,7 @@ import { getCollection, render } from 'astro:content'
 import { Image } from 'astro:assets'
 import Prose from '../../components/Prose.astro'
 import { getCategorySlug, getRelatedPosts } from '../../lib/utils'
+import { getCategoryBySlug } from '../../data/categories'
 
 export async function getStaticPaths() {
     const blogEntries = await getCollection('blog')
@@ -24,6 +25,13 @@ export async function getStaticPaths() {
 const { entry } = Astro.props
 const { Content, headings } = await render(entry)
 const d = entry.data
+
+const categorySlug = getCategorySlug(d.category)
+const categoryName = getCategoryBySlug(categorySlug)?.name ?? d.category
+
+// Rough reading estimate from the raw body (~200 wpm).
+const wordCount = entry.body?.trim().split(/\s+/).filter(Boolean).length ?? 0
+const readingTime = Math.max(1, Math.round(wordCount / 200))
 
 const relatedPosts = getRelatedPosts(await getCollection('blog'), entry, 3)
 
@@ -44,11 +52,8 @@ const hasReview = !!(
                 <nav class="text-base-content/70 mb-6 text-sm">
                     <a href="/" class="hover:text-primary transition-colors">Home</a>
                     <span class="mx-2 opacity-40">/</span>
-                    <a
-                        href={`/${getCategorySlug(d.category)}`}
-                        class="hover:text-primary capitalize transition-colors"
-                    >
-                        {d.category}
+                    <a href={`/${categorySlug}`} class="hover:text-primary transition-colors">
+                        {categoryName}
                     </a>
                 </nav>
 
@@ -86,6 +91,8 @@ const hasReview = !!(
                     <span>By {d.author}</span>
                     <span class="opacity-40">·</span>
                     <FormattedDate date={d.pubDate} />
+                    <span class="opacity-40">·</span>
+                    <span>{readingTime} min read</span>
                     {
                         d.updated && (
                             <>
@@ -130,6 +137,27 @@ const hasReview = !!(
 
             <!-- Verdict receipt + body (single measure) -->
             <div class="mx-auto max-w-[44rem]">
+                {
+                    headings.length > 1 && (
+                        <details class="group border-base-300 bg-base-200/40 mb-8 rounded-2xl border lg:hidden">
+                            <summary class="eyebrow text-base-content/60 flex cursor-pointer list-none items-center justify-between px-5 py-3.5 text-[0.7rem] [&::-webkit-details-marker]:hidden">
+                                On this page
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="1.1em"
+                                    height="1.1em"
+                                    viewBox="0 0 24 24"
+                                    class="opacity-50 transition-transform group-open:rotate-180"
+                                >
+                                    <path fill="currentColor" d="m12 15l-5-5h10z" />
+                                </svg>
+                            </summary>
+                            <div class="px-3 pb-3">
+                                <TableOfContents headings={headings} />
+                            </div>
+                        </details>
+                    )
+                }
                 {
                     hasReview && (
                         <ReviewSummary

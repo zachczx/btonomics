@@ -26,53 +26,60 @@ interface Heading {
 </nav>
 
 <script>
-    const visibleHeadings = new Map()
+    // Re-run on every client-router navigation (and the initial load). The page may
+    // render the TOC twice — a collapsible one on mobile and the sticky aside on
+    // desktop — so active state is mirrored across all `.toc` navs.
+    let observer: IntersectionObserver | null = null
 
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    visibleHeadings.set(entry.target.getAttribute('id'), entry)
-                } else {
-                    visibleHeadings.delete(entry.target.getAttribute('id'))
-                }
-            })
+    function setupToc() {
+        const tocLinks = document.querySelectorAll('.toc a')
+        if (!tocLinks.length) return
 
-            const visibleIds = Array.from(visibleHeadings.keys())
-            let activeId = ''
+        observer?.disconnect()
+        const visibleHeadings = new Map<string, IntersectionObserverEntry>()
 
-            if (visibleIds.length > 0) {
-                const allLinks = document.querySelectorAll('.toc a')
-                for (const link of allLinks) {
-                    const href = link.getAttribute('href')?.substring(1)
-                    if (visibleHeadings.has(href)) {
-                        activeId = href ?? ''
-                        break
+        observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const id = entry.target.getAttribute('id') ?? ''
+                    if (entry.isIntersecting) visibleHeadings.set(id, entry)
+                    else visibleHeadings.delete(id)
+                })
+
+                let activeId = ''
+                if (visibleHeadings.size > 0) {
+                    for (const link of tocLinks) {
+                        const href = link.getAttribute('href')?.substring(1)
+                        if (href && visibleHeadings.has(href)) {
+                            activeId = href
+                            break
+                        }
                     }
                 }
-            }
 
-            if (activeId) {
-                document.querySelectorAll('.toc a').forEach((l) => {
-                    l.removeAttribute('data-active')
-                })
-                const activeLink = document.querySelector(`.toc a[href="#${activeId}"]`)
-                activeLink?.setAttribute('data-active', 'true')
-            }
-        },
-        { rootMargin: '-100px 0% -66% 0%', threshold: 0 },
-    )
+                if (activeId) {
+                    document
+                        .querySelectorAll('.toc a')
+                        .forEach((l) => l.removeAttribute('data-active'))
+                    document
+                        .querySelectorAll(`.toc a[href="#${activeId}"]`)
+                        .forEach((l) => l.setAttribute('data-active', 'true'))
+                }
+            },
+            { rootMargin: '-100px 0% -66% 0%', threshold: 0 },
+        )
 
-    document.querySelectorAll('article :is(h1, h2, h3, h4)').forEach((h) => {
-        observer.observe(h)
-    })
+        document
+            .querySelectorAll('article[data-pagefind-body] :is(h1, h2, h3, h4)')
+            .forEach((h) => observer!.observe(h))
 
-    document.querySelectorAll('.toc a').forEach((link) => {
-        link.addEventListener('click', (e) => {
-            document.querySelectorAll('.toc a').forEach((l) => {
-                l.removeAttribute('data-active')
+        tocLinks.forEach((link) => {
+            link.addEventListener('click', (e) => {
+                document.querySelectorAll('.toc a').forEach((l) => l.removeAttribute('data-active'))
+                ;(e.currentTarget as Element).setAttribute('data-active', 'true')
             })
-            ;(e.currentTarget as Element).setAttribute('data-active', 'true')
         })
-    })
+    }
+
+    document.addEventListener('astro:page-load', setupToc)
 </script>
