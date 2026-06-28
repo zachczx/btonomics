@@ -1,5 +1,6 @@
 ---
 import { categories } from '../data/categories'
+import CategorySwatch from './CategorySwatch.astro'
 ---
 
 <header
@@ -37,24 +38,17 @@ import { categories } from '../data/categories'
                     class="dropdown-content border-base-300 bg-base-100 rounded-box z-[1] mt-2 w-60 border p-2 shadow-lg"
                 >
                     {
-                        categories.map((cat) => {
-                            const Icon = cat.icon
-                            return (
-                                <li>
-                                    <a
-                                        href={`/${cat.slug}`}
-                                        class="hover:bg-base-200 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors"
-                                    >
-                                        <span
-                                            class={`${cat.tintBg} flex h-7 w-7 items-center justify-center rounded-md text-sm`}
-                                        >
-                                            <Icon />
-                                        </span>
-                                        <span class="text-ink font-semibold">{cat.name}</span>
-                                    </a>
-                                </li>
-                            )
-                        })
+                        categories.map((cat) => (
+                            <li>
+                                <a
+                                    href={`/${cat.slug}`}
+                                    class="hover:bg-base-200 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors"
+                                >
+                                    <CategorySwatch color={cat.swatch} class="h-7 w-7 rounded-md" />
+                                    <span class="text-ink font-semibold">{cat.name}</span>
+                                </a>
+                            </li>
+                        ))
                     }
                 </ul>
             </div>

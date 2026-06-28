@@ -1,9 +1,3 @@
-import IconHammer from '~icons/noto/hammer'
-import IconStar from '~icons/noto/star'
-import IconCart from '~icons/noto/shopping-cart'
-import IconWrench from '~icons/noto/wrench'
-import IconThinking from '~icons/noto/thinking-face'
-
 export interface Category {
     /** URL slug, also the value posts get after getCategorySlug() */
     slug: string
@@ -11,11 +5,9 @@ export interface Category {
     name: string
     /** canonical `category` value in post frontmatter */
     category: string
-    icon: typeof IconHammer
     description: string
-    /** soft tint for the category header band + chips */
-    tintBg: string
-    tintText: string
+    /** the category's paint colour (hex) — rendered as a paint-chip swatch */
+    swatch: string
 }
 
 export const categories: Category[] = [
@@ -23,51 +15,41 @@ export const categories: Category[] = [
         slug: 'renovation',
         name: 'Renovation',
         category: 'Renovation',
-        icon: IconHammer,
         description:
             'The messy middle, hacking, screeding, wet works, painting, and the trades who did it.',
-        tintBg: 'bg-softcoral',
-        tintText: 'text-primary',
+        swatch: '#ff5a45', // coral
     },
     {
         slug: 'honest-reviews',
         name: 'Reviews',
         category: 'Honest Reviews',
-        icon: IconStar,
         description:
             'No-sponsor verdicts on the stuff we actually bought and the vendors we actually hired.',
-        tintBg: 'bg-softteal',
-        tintText: 'text-secondary',
+        swatch: '#0e9aa0', // teal
     },
     {
         slug: 'shopping',
         name: 'Shopping',
         category: 'Shopping',
-        icon: IconCart,
         description:
             'Where to buy, what to skip, and how not to overpay, Taobao, IKEA, and everything in between.',
-        tintBg: 'bg-softmarigold',
-        tintText: 'text-accent-content',
+        swatch: '#ffb22e', // marigold
     },
     {
         slug: 'maintenance',
         name: 'Maintenance',
         category: 'Maintenance',
-        icon: IconWrench,
         description:
             'Keeping a lived-in HDB running, servicing, cleaning, mould, and the small fixes.',
-        tintBg: 'bg-softteal',
-        tintText: 'text-secondary',
+        swatch: '#37658a', // blueprint blue
     },
     {
         slug: 'general',
         name: 'General',
         category: 'General',
-        icon: IconThinking,
         description:
             'Everything else, the money calls, the neighbours, and the occasional good bowl of noodles.',
-        tintBg: 'bg-softcoral',
-        tintText: 'text-primary',
+        swatch: '#1b1714', // ink
     },
 ]
 

@@ -97,6 +97,22 @@ Retired the second, tag-driven "topical" category set (it was typo-ridden — `A
 - `src/pages/verdicts.astro` — **new.** Cross-category hub of every post with a rating/verdict (defaults to highest-rated), with count + avg-rating stat line. Linked from navbar, footer, and the home honest-truth section.
 - `src/components/TableOfContents.astro` — script re-runs on `astro:page-load`, mirrors active state across both TOC copies (mobile + desktop), and scopes heading observation to the prose body.
 
+### De-genericizing pass — in progress
+
+Goal: strip the generic landing-page furniture and push the renovation-document
+language into the structure. Tells identified, loudest first: (1) emoji icons,
+(2) eyebrow → big-bold-heading section headers repeated on every section, (3) the
+by-the-numbers stats strip, (4) rounded-full-everything + lift-hover soft-shadow
+cards, (5) trailing "→" link arrows + coral-on-hover heading swaps.
+
+- **#1 Icons — done.** Category emoji (`~icons/noto/*`) and the soft-tint tiles
+  were replaced with **paint-chip swatches**: each category carries a `swatch` hex
+  in `categories.ts`, rendered by `src/components/CategorySwatch.astro` (a solid
+  colour block with a darker bottom band, like a real paint sample). 5-colour
+  palette: coral / teal / marigold / blueprint-blue `#37658a` / ink. Touches the
+  navbar Browse dropdown, the home category cards, and the category page header +
+  switcher. (The home Win/Fail *feature* cards still use noto emoji on purpose.)
+
 ### Cleanup — done
 
 - Removed `src/pages/variants/` (v1–v4 mockups).

@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import PostGrid from '../../components/PostGrid.astro'
+import CategorySwatch from '../../components/CategorySwatch.astro'
 import { getCollection } from 'astro:content'
 import { categories, getCategoryBySlug } from '../../data/categories'
 import { getCategorySlug } from '../../lib/utils'
@@ -11,7 +12,6 @@ export async function getStaticPaths() {
 
 const { category } = Astro.params
 const cat = getCategoryBySlug(category!)!
-const Icon = cat.icon
 
 const posts = await getCollection('blog', ({ data }) => getCategorySlug(data.category) === category)
 posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -29,17 +29,13 @@ const others = categories.filter((c) => c.slug !== category)
         </nav>
 
         <div class="flex items-start gap-4">
-            <span
-                class={`${cat.tintBg} flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl`}
-            >
-                <Icon />
-            </span>
+            <CategorySwatch color={cat.swatch} class="h-14 w-14 rounded-2xl" />
             <div>
                 <div class="flex items-center gap-3">
                     <h1 class="text-ink font-heading text-4xl font-extrabold md:text-5xl">
                         {cat.name}
                     </h1>
-                    <span class={`eyebrow ${cat.tintBg} ${cat.tintText} rounded-full px-2.5 py-1`}>
+                    <span class="eyebrow bg-base-200 text-ink/60 rounded-full px-2.5 py-1">
                         {posts.length}
                         {posts.length === 1 ? 'post' : 'posts'}
                     </span>
@@ -65,20 +61,15 @@ const others = categories.filter((c) => c.slug !== category)
         <span class="eyebrow text-primary text-[0.7rem]">Keep browsing</span>
         <div class="mt-4 flex flex-wrap gap-3">
             {
-                others.map((c) => {
-                    const OtherIcon = c.icon
-                    return (
-                        <a
-                            href={`/${c.slug}`}
-                            class="border-base-300 hover:border-ink/30 group inline-flex items-center gap-2.5 rounded-full border px-4 py-2.5 transition-colors"
-                        >
-                            <span class={`${c.tintBg} rounded-md p-1 text-base`}>
-                                <OtherIcon />
-                            </span>
-                            <span class="text-ink font-semibold">{c.name}</span>
-                        </a>
-                    )
-                })
+                others.map((c) => (
+                    <a
+                        href={`/${c.slug}`}
+                        class="border-base-300 hover:border-ink/30 group inline-flex items-center gap-2.5 rounded-full border px-4 py-2.5 transition-colors"
+                    >
+                        <CategorySwatch color={c.swatch} class="h-4 w-4 rounded" />
+                        <span class="text-ink font-semibold">{c.name}</span>
+                    </a>
+                ))
             }
         </div>
     </div>
