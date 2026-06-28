@@ -13,8 +13,28 @@ import Party from '~icons/noto/party-popper'
 const allPosts = await CleanAndSort()
 allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 const latestPosts = allPosts.slice(0, 6)
-const regretPost = allPosts.find((post) => post.data.mood === 'negative')
-const worthItPost = allPosts.find((post) => post.data.mood === 'positive')
+
+// Honest-truth picks: prefer posts that actually carry a verdict, by rating extremes,
+// so the cards show real receipts (cost + rating) rather than just a title.
+const withVerdict = allPosts.filter((p) => p.data.verdict)
+const worthItPost =
+    withVerdict
+        .filter((p) => p.data.mood === 'positive')
+        .sort((a, b) => (b.data.rating ?? 0) - (a.data.rating ?? 0))[0] ||
+    allPosts.find((p) => p.data.mood === 'positive')
+const regretPost =
+    withVerdict
+        .filter((p) => p.data.mood === 'negative')
+        .sort((a, b) => (a.data.rating ?? 5) - (b.data.rating ?? 5))[0] ||
+    allPosts.find((p) => p.data.mood === 'negative')
+
+// "Receipts" stats
+const postCount = allPosts.length
+const verdictCount = withVerdict.length
+const winCount = allPosts.filter((p) => p.data.mood === 'positive').length
+const failCount = allPosts.filter((p) => p.data.mood === 'negative').length
+const startYear = Math.min(...allPosts.map((p) => p.data.pubDate.getFullYear()))
+const yearsDocumented = Math.max(1, new Date().getFullYear() - startYear)
 
 // allPosts came through CleanAndSort(), so data.category is already the slug
 const categoryCounts: Record<string, number> = {}
@@ -23,7 +43,11 @@ categories.forEach((cat) => {
 })
 ---
 
-<Layout title="Home" fullBleed>
+<Layout
+    title="Honest HDB renovation, with receipts"
+    description="A Singapore couple's honest HDB/BTO renovation diary — the wins, the regrets, and what each one actually cost, so your first place turns out better than ours did."
+    fullBleed
+>
     <!-- ============ HERO — before / after ============ -->
     <section class="bg-paper relative overflow-hidden">
         <div
@@ -37,7 +61,7 @@ categories.forEach((cat) => {
                 <span
                     class="eyebrow border-ink/10 bg-base-100 text-secondary inline-flex items-center gap-2 rounded-full border-2 px-4 py-2 text-[0.66rem]"
                 >
-                    Bukit Batok · 4-room HDB · since 2018
+                    Bukit Batok · 4-room HDB · since {startYear}
                 </span>
                 <h1 class="text-ink mt-5 text-5xl leading-[1.0] font-extrabold md:text-6xl">
                     Renovating a home, <span class="marker">honestly.</span>
@@ -62,7 +86,7 @@ categories.forEach((cat) => {
 
             <!-- before / after signature -->
             <div class="relative mx-auto w-full max-w-lg">
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-3 sm:gap-4">
                     <figure class="relative">
                         <div
                             class="border-ink/10 bg-base-100 aspect-4/5 overflow-hidden rounded-2xl border-2"
@@ -105,6 +129,43 @@ categories.forEach((cat) => {
                 >
                     →
                 </div>
+                <p class="eyebrow text-ink/40 mt-4 text-center text-[0.58rem]">
+                    Our actual living room — the 3D render vs. move-in day
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ RECEIPTS — by the numbers ============ -->
+    <section class="bg-neutral text-neutral-content">
+        <div class="container mx-auto grid grid-cols-2 gap-6 px-4 py-10 sm:grid-cols-4 md:py-12">
+            <div>
+                <div class="ledger text-3xl font-extrabold md:text-4xl">{postCount}</div>
+                <div class="eyebrow text-neutral-content/55 mt-1 text-[0.6rem]">
+                    posts &amp; counting
+                </div>
+            </div>
+            <div>
+                <div class="ledger text-3xl font-extrabold md:text-4xl">{yearsDocumented}</div>
+                <div class="eyebrow text-neutral-content/55 mt-1 text-[0.6rem]">
+                    years documented
+                </div>
+            </div>
+            <div>
+                <div class="ledger text-accent text-3xl font-extrabold md:text-4xl">
+                    {verdictCount}
+                </div>
+                <div class="eyebrow text-neutral-content/55 mt-1 text-[0.6rem]">
+                    honest verdicts
+                </div>
+            </div>
+            <div>
+                <div class="ledger text-3xl font-extrabold md:text-4xl">
+                    <span class="text-secondary">{winCount}</span>
+                    <span class="text-neutral-content/30">/</span>
+                    <span class="text-primary">{failCount}</span>
+                </div>
+                <div class="eyebrow text-neutral-content/55 mt-1 text-[0.6rem]">wins / fails</div>
             </div>
         </div>
     </section>
@@ -124,7 +185,7 @@ categories.forEach((cat) => {
                                 href={`/${regretPost.data.category}/${regretPost.data.slug}`}
                                 class="group block"
                             >
-                                <div class="border-error/25 bg-base-100 hover:border-error overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1">
+                                <div class="border-error/25 bg-base-100 hover:border-error h-full overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1">
                                     {regretPost.data.image && (
                                         <div class="bg-base-200 aspect-video overflow-hidden">
                                             <Image
@@ -143,9 +204,42 @@ categories.forEach((cat) => {
                                         <h3 class="text-ink group-hover:text-primary mt-3 text-lg font-bold transition-colors">
                                             {regretPost.data.title}
                                         </h3>
-                                        <p class="text-ink/55 mt-1 text-sm">
-                                            Read the cautionary tale →
-                                        </p>
+                                        {regretPost.data.verdict && (
+                                            <p class="text-ink/70 mt-2 text-sm leading-snug italic">
+                                                “{regretPost.data.verdict}”
+                                            </p>
+                                        )}
+                                        <div class="mt-3 flex flex-wrap items-center gap-3">
+                                            {regretPost.data.rating != null && (
+                                                <span
+                                                    class="flex items-center gap-0.5"
+                                                    title={`${regretPost.data.rating} out of 5`}
+                                                >
+                                                    {[1, 2, 3, 4, 5].map((i) => (
+                                                        <span
+                                                            class={
+                                                                i <=
+                                                                Math.round(
+                                                                    regretPost.data.rating ?? 0,
+                                                                )
+                                                                    ? 'text-error text-sm'
+                                                                    : 'text-base-300 text-sm'
+                                                            }
+                                                        >
+                                                            ★
+                                                        </span>
+                                                    ))}
+                                                    <span class="ledger text-ink/45 ml-1 text-xs">
+                                                        {regretPost.data.rating}/5
+                                                    </span>
+                                                </span>
+                                            )}
+                                            {regretPost.data.cost && (
+                                                <span class="ledger bg-softmarigold text-accent-content rounded-full px-2.5 py-1 text-xs font-semibold">
+                                                    {regretPost.data.cost}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </a>
@@ -155,7 +249,7 @@ categories.forEach((cat) => {
                                 href={`/${worthItPost.data.category}/${worthItPost.data.slug}`}
                                 class="group block"
                             >
-                                <div class="border-secondary/25 bg-base-100 hover:border-secondary overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1">
+                                <div class="border-secondary/25 bg-base-100 hover:border-secondary h-full overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1">
                                     {worthItPost.data.image && (
                                         <div class="bg-base-200 aspect-video overflow-hidden">
                                             <Image
@@ -174,9 +268,42 @@ categories.forEach((cat) => {
                                         <h3 class="text-ink group-hover:text-secondary mt-3 text-lg font-bold transition-colors">
                                             {worthItPost.data.title}
                                         </h3>
-                                        <p class="text-ink/55 mt-1 text-sm">
-                                            See why we'd do it again →
-                                        </p>
+                                        {worthItPost.data.verdict && (
+                                            <p class="text-ink/70 mt-2 text-sm leading-snug italic">
+                                                “{worthItPost.data.verdict}”
+                                            </p>
+                                        )}
+                                        <div class="mt-3 flex flex-wrap items-center gap-3">
+                                            {worthItPost.data.rating != null && (
+                                                <span
+                                                    class="flex items-center gap-0.5"
+                                                    title={`${worthItPost.data.rating} out of 5`}
+                                                >
+                                                    {[1, 2, 3, 4, 5].map((i) => (
+                                                        <span
+                                                            class={
+                                                                i <=
+                                                                Math.round(
+                                                                    worthItPost.data.rating ?? 0,
+                                                                )
+                                                                    ? 'text-secondary text-sm'
+                                                                    : 'text-base-300 text-sm'
+                                                            }
+                                                        >
+                                                            ★
+                                                        </span>
+                                                    ))}
+                                                    <span class="ledger text-ink/45 ml-1 text-xs">
+                                                        {worthItPost.data.rating}/5
+                                                    </span>
+                                                </span>
+                                            )}
+                                            {worthItPost.data.cost && (
+                                                <span class="ledger bg-softmarigold text-accent-content rounded-full px-2.5 py-1 text-xs font-semibold">
+                                                    {worthItPost.data.cost}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </a>
@@ -187,33 +314,42 @@ categories.forEach((cat) => {
         )
     }
 
-    <!-- ============ LATEST ============ -->
+    <!-- ============ FIND WHAT YOU NEED — search + browse ============ -->
     <section class="bg-paper py-16 md:py-20">
-        <div class="container mx-auto px-4">
-            <div class="mb-8 flex flex-wrap items-end justify-between gap-2">
-                <div>
-                    <span class="eyebrow text-primary text-[0.7rem]">Fresh off the to-do list</span>
-                    <h2 class="text-ink mt-2 text-4xl font-extrabold">Latest happenings</h2>
-                </div>
-                <a
-                    href="/blog"
-                    class="text-secondary inline-flex items-center gap-1 font-semibold hover:underline"
-                    >See all →</a
-                >
-            </div>
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {latestPosts.map((post) => <PostCard post={post} />)}
-            </div>
-        </div>
-    </section>
-
-    <!-- ============ BROWSE BY CATEGORY ============ -->
-    <section class="bg-base-100 py-16 md:py-20">
         <div class="container mx-auto px-4">
             <div class="mb-8">
                 <span class="eyebrow text-primary text-[0.7rem]">Find your rabbit hole</span>
-                <h2 class="text-ink mt-2 text-4xl font-extrabold">Browse by category</h2>
+                <h2 class="text-ink mt-2 text-4xl font-extrabold">Search the diary</h2>
             </div>
+
+            <a
+                href="/search"
+                class="border-base-300 bg-base-100 hover:border-ink/30 group flex items-center gap-3 rounded-full border-2 px-5 py-3.5 transition-colors"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1.15em"
+                    height="1.15em"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    class="text-ink/40 shrink-0"
+                >
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                <span class="text-ink/45 truncate"
+                    >Search {postCount} posts — vinyl, Taobao, aircon…</span
+                >
+                <span
+                    class="eyebrow bg-neutral text-neutral-content ml-auto hidden shrink-0 rounded-full px-3 py-1 text-[0.6rem] sm:inline"
+                    >Search</span
+                >
+            </a>
+
+            <p class="eyebrow text-ink/40 mt-8 mb-4 text-[0.62rem]">Or jump to a category</p>
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                 {
                     categories.map((cat) => {
@@ -221,7 +357,7 @@ categories.forEach((cat) => {
                         return (
                             <a
                                 href={`/${cat.slug}`}
-                                class="group border-base-300 hover:border-ink/25 flex flex-col rounded-2xl border p-5 transition-all hover:-translate-y-1 hover:shadow-[0_18px_38px_-22px_rgba(27,23,20,0.35)]"
+                                class="group border-base-300 hover:border-ink/25 bg-base-100 flex flex-col rounded-2xl border p-5 transition-all hover:-translate-y-1 hover:shadow-[0_18px_38px_-22px_rgba(27,23,20,0.35)]"
                             >
                                 <span
                                     class={`${cat.tintBg} flex h-11 w-11 items-center justify-center rounded-xl text-xl`}
@@ -238,6 +374,26 @@ categories.forEach((cat) => {
                         )
                     })
                 }
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ LATEST ============ -->
+    <section class="bg-base-100 py-16 md:py-20">
+        <div class="container mx-auto px-4">
+            <div class="mb-8 flex flex-wrap items-end justify-between gap-2">
+                <div>
+                    <span class="eyebrow text-primary text-[0.7rem]">Fresh off the to-do list</span>
+                    <h2 class="text-ink mt-2 text-4xl font-extrabold">Latest happenings</h2>
+                </div>
+                <a
+                    href="/blog"
+                    class="text-secondary inline-flex items-center gap-1 font-semibold hover:underline"
+                    >See all →</a
+                >
+            </div>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {latestPosts.map((post) => <PostCard post={post} />)}
             </div>
         </div>
     </section>

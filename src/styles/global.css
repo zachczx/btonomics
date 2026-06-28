@@ -10,10 +10,10 @@
        Win = teal, Fail = coral.
     */
     --color-primary: #ff5a45; /* coral */
-    --color-primary-content: #ffffff;
+    --color-primary-content: #1b1714; /* ink text — white on coral fails WCAG AA */
 
     --color-secondary: #0e9aa0; /* teal */
-    --color-secondary-content: #ffffff;
+    --color-secondary-content: #1b1714; /* ink text — white on teal fails WCAG AA */
 
     --color-accent: #ffb22e; /* marigold */
     --color-accent-content: #2a1c06;
@@ -29,11 +29,11 @@
     --color-info: #0e9aa0;
     --color-info-content: #ffffff;
     --color-success: #0e9aa0; /* WIN = teal */
-    --color-success-content: #ffffff;
+    --color-success-content: #1b1714; /* ink — AA contrast on teal */
     --color-warning: #ffb22e;
     --color-warning-content: #2a1c06;
     --color-error: #ff5a45; /* FAIL = coral */
-    --color-error-content: #ffffff;
+    --color-error-content: #1b1714; /* ink — AA contrast on coral */
 
     --radius-box: 1.1rem;
     --radius-field: 0.7rem;
@@ -150,5 +150,30 @@
         content: '/';
         margin-inline-start: 0.25rem;
         margin-inline-end: 0.25rem;
+    }
+}
+
+/* --- accessibility ------------------------------------------------ */
+
+/* visible keyboard focus on all interactive elements */
+@layer base {
+    :focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+        border-radius: 3px;
+    }
+}
+
+/* respect users who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *,
+    ::before,
+    ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
