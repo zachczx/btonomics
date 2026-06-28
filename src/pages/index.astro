@@ -165,9 +165,19 @@ categories.forEach((cat) => {
         (regretPost || worthItPost) && (
             <section class="bg-base-100 py-16 md:py-20">
                 <div class="container mx-auto px-4">
-                    <div class="mb-9">
-                        <span class="eyebrow text-primary text-[0.7rem]">Receipts don't lie</span>
-                        <h2 class="text-ink mt-2 text-4xl font-extrabold">The honest truth</h2>
+                    <div class="mb-9 flex flex-wrap items-end justify-between gap-2">
+                        <div>
+                            <span class="eyebrow text-primary text-[0.7rem]">
+                                Receipts don't lie
+                            </span>
+                            <h2 class="text-ink mt-2 text-4xl font-extrabold">The honest truth</h2>
+                        </div>
+                        <a
+                            href="/verdicts"
+                            class="text-secondary inline-flex items-center gap-1 font-semibold hover:underline"
+                        >
+                            See all verdicts →
+                        </a>
                     </div>
                     <div class="grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
                         {regretPost && (

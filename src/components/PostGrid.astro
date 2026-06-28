@@ -1,0 +1,143 @@
+---
+import PostCard from './PostCard.astro'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+    posts: CollectionEntry<'blog'>[]
+    /** show the Newest / Oldest / Highest-rated sort control */
+    sortable?: boolean
+    /** show the All / Wins / Fails (mood) filter control */
+    filterable?: boolean
+    /** which sort option is selected on load */
+    defaultSort?: 'newest' | 'oldest' | 'rating'
+    /** unique id, needed if more than one grid lives on the same page */
+    id?: string
+}
+const {
+    posts,
+    sortable = false,
+    filterable = false,
+    defaultSort = 'newest',
+    id = 'postgrid',
+} = Astro.props
+
+const interactive = sortable || filterable
+const filters = [
+    { value: 'all', label: 'All' },
+    { value: 'positive', label: 'Wins' },
+    { value: 'negative', label: 'Fails' },
+]
+const sorts = [
+    { value: 'newest', label: 'Newest' },
+    { value: 'oldest', label: 'Oldest' },
+    { value: 'rating', label: 'Highest rated' },
+]
+---
+
+{
+    interactive && (
+        <div class="mb-6 flex flex-wrap items-center gap-x-4 gap-y-3">
+            {filterable && (
+                <div class="bg-base-200 border-base-300 inline-flex gap-1 rounded-full border p-1">
+                    {filters.map((f) => (
+                        <button
+                            type="button"
+                            data-filter-for={id}
+                            data-value={f.value}
+                            data-active={f.value === 'all' ? 'true' : 'false'}
+                            class="text-ink/60 data-[active=true]:bg-neutral data-[active=true]:text-neutral-content cursor-pointer rounded-full px-3.5 py-1.5 text-sm font-semibold transition-colors"
+                        >
+                            {f.label}
+                        </button>
+                    ))}
+                </div>
+            )}
+            {sortable && (
+                <label class="ml-auto flex items-center gap-2">
+                    <span class="eyebrow text-ink/45 text-[0.62rem]">Sort</span>
+                    <select
+                        data-sort-for={id}
+                        class="border-base-300 bg-base-100 text-ink focus:border-ink/40 cursor-pointer rounded-full border px-4 py-1.5 text-sm font-semibold focus:outline-none"
+                    >
+                        {sorts.map((s) => (
+                            <option value={s.value} selected={s.value === defaultSort}>
+                                {s.label}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+            )}
+        </div>
+    )
+}
+
+<div
+    id={id}
+    class:list={[
+        'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3',
+        interactive && 'js-postgrid',
+    ]}
+    data-filter="all"
+>
+    {posts.map((post) => <PostCard post={post} />)}
+</div>
+
+{
+    interactive && (
+        <p data-empty-for={id} class="text-ink/55 mt-10 hidden text-center">
+            Nothing matches that filter yet.
+        </p>
+    )
+}
+
+<script>
+    function setupGrid(grid: HTMLElement) {
+        const cards = Array.from(grid.children) as HTMLElement[]
+        const sortSel = document.querySelector<HTMLSelectElement>(`[data-sort-for="${grid.id}"]`)
+        const filterBtns = Array.from(
+            document.querySelectorAll<HTMLButtonElement>(`[data-filter-for="${grid.id}"]`),
+        )
+        const emptyMsg = document.querySelector<HTMLElement>(`[data-empty-for="${grid.id}"]`)
+
+        function apply() {
+            const mode = sortSel?.value ?? 'newest'
+            const sorted = [...cards].sort((a, b) => {
+                const da = Number(a.dataset.date),
+                    db = Number(b.dataset.date)
+                if (mode === 'oldest') return da - db
+                if (mode === 'rating') {
+                    const ra = a.dataset.rating ? Number(a.dataset.rating) : -1
+                    const rb = b.dataset.rating ? Number(b.dataset.rating) : -1
+                    return rb - ra || db - da
+                }
+                return db - da
+            })
+            sorted.forEach((c) => grid.appendChild(c))
+
+            const active = grid.dataset.filter ?? 'all'
+            let shown = 0
+            cards.forEach((c) => {
+                const visible = active === 'all' || c.dataset.mood === active
+                c.style.display = visible ? '' : 'none'
+                if (visible) shown++
+            })
+            if (emptyMsg) emptyMsg.classList.toggle('hidden', shown > 0)
+        }
+
+        sortSel?.addEventListener('change', apply)
+        filterBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                grid.dataset.filter = btn.dataset.value ?? 'all'
+                filterBtns.forEach((b) => b.setAttribute('data-active', String(b === btn)))
+                apply()
+            })
+        })
+        apply()
+    }
+
+    function setupGrids() {
+        document.querySelectorAll<HTMLElement>('.js-postgrid').forEach(setupGrid)
+    }
+
+    document.addEventListener('astro:page-load', setupGrids)
+</script>

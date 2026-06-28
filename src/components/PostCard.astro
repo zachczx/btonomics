@@ -17,7 +17,12 @@ const d = post.data
 const href = `/${getCategorySlug(d.category)}/${d.slug || post.id}`
 ---
 
-<article class="group">
+<article
+    class="group"
+    data-date={d.pubDate.valueOf()}
+    data-rating={d.rating ?? ''}
+    data-mood={d.mood ?? ''}
+>
     <a href={href} class="block">
         <div
             class="bg-base-100 border-base-300 overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_38px_-22px_rgba(27,23,20,0.35)]"

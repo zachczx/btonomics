@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro'
+import PostGrid from '../components/PostGrid.astro'
+import { CleanAndSort } from '../lib/utils'
+
+const allPosts = await CleanAndSort()
+const rated = allPosts.filter((p) => p.data.rating != null || p.data.verdict)
+rated.sort((a, b) => (b.data.rating ?? 0) - (a.data.rating ?? 0))
+
+const withRating = rated.filter((p) => p.data.rating != null)
+const avgRating =
+    withRating.length > 0
+        ? withRating.reduce((sum, p) => sum + (p.data.rating ?? 0), 0) / withRating.length
+        : 0
+const winCount = rated.filter((p) => p.data.mood === 'positive').length
+const failCount = rated.filter((p) => p.data.mood === 'negative').length
+---
+
+<Layout
+    title="The verdicts"
+    description="Every product and vendor we put a real rating on, the wins, the regrets, and what we'd actually buy again. No sponsors, no affiliate kickbacks."
+>
+    <div class="mb-10">
+        <span class="eyebrow text-primary text-xs">Receipts don't lie</span>
+        <h1 class="text-base-content font-heading mt-2 text-5xl font-extrabold md:text-6xl">
+            The verdicts
+        </h1>
+        <p class="text-base-content/65 mt-3 max-w-2xl text-lg">
+            Everything we put a real rating on, the stuff worth your money and the stuff that
+            wasn't. No sponsors, no affiliate kickbacks, just our own receipts.
+        </p>
+        <div
+            class="ledger text-base-content/55 mt-6 flex flex-wrap items-baseline gap-x-5 gap-y-1.5 text-sm"
+        >
+            <span>
+                <strong class="text-base-content text-lg font-extrabold">{rated.length}</strong> verdicts
+            </span>
+            <span class="text-ink/20" aria-hidden="true">·</span>
+            <span>
+                <strong class="text-accent-content text-lg font-extrabold">
+                    {avgRating.toFixed(1)}
+                </strong> avg ★
+            </span>
+            <span class="text-ink/20" aria-hidden="true">·</span>
+            <span>
+                <strong class="text-secondary text-lg font-extrabold">{winCount}</strong> wins /
+                <strong class="text-primary text-lg font-extrabold">{failCount}</strong> fails
+            </span>
+        </div>
+    </div>
+
+    <PostGrid posts={rated} sortable filterable defaultSort="rating" id="verdicts" />
+</Layout>
