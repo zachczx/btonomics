@@ -47,7 +47,7 @@ const hasReview = !!(
 
 <Layout title={d.title}>
     <div class="mx-auto w-full max-w-[1440px] lg:flex lg:gap-10">
-        <main class="bg-base-100 min-w-0 flex-1 rounded-2xl p-5 shadow-sm lg:p-10">
+        <main class="bg-base-100 border-base-300 min-w-0 flex-1 rounded-lg border p-5 lg:p-10">
             <!-- Header (single reading measure) -->
             <div class="mx-auto max-w-[44rem]">
                 <nav class="text-base-content/70 mb-6 text-sm">
@@ -130,7 +130,7 @@ const hasReview = !!(
                             src={d.image}
                             alt={d.title}
                             width={1100}
-                            class="max-h-[30rem] w-full rounded-2xl object-cover shadow-sm"
+                            class="max-h-[30rem] w-full rounded-lg object-cover"
                         />
                     </figure>
                 )
@@ -140,7 +140,7 @@ const hasReview = !!(
             <div class="mx-auto max-w-[44rem]">
                 {
                     headings.length > 1 && (
-                        <details class="group border-base-300 bg-base-200/40 mb-8 rounded-2xl border lg:hidden">
+                        <details class="group border-base-300 bg-base-200/40 mb-8 rounded-lg border lg:hidden">
                             <summary class="eyebrow text-base-content/60 flex cursor-pointer list-none items-center justify-between px-5 py-3.5 text-[0.7rem] [&::-webkit-details-marker]:hidden">
                                 On this page
                                 <svg

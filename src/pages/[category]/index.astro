@@ -50,7 +50,7 @@ const others = categories.filter((c) => c.slug !== category)
         posts.length > 0 ? (
             <PostGrid posts={posts} sortable={posts.length > 1} id="cat-posts" />
         ) : (
-            <div class="border-base-300 bg-base-200 text-ink/55 rounded-2xl border px-6 py-14 text-center">
+            <div class="border-base-300 bg-base-200 text-ink/55 rounded-lg border px-6 py-14 text-center">
                 Nothing here yet, check back soon.
             </div>
         )

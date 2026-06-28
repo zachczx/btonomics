@@ -179,7 +179,7 @@ categories.forEach((cat) => {
                                 href={`/${regretPost.data.category}/${regretPost.data.slug}`}
                                 class="group block"
                             >
-                                <div class="border-error/25 bg-base-100 hover:border-error h-full overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1">
+                                <div class="border-error/25 bg-base-100 hover:border-error h-full overflow-hidden rounded-lg border-2 transition-colors duration-200">
                                     {regretPost.data.image && (
                                         <div class="bg-base-200 aspect-video overflow-hidden">
                                             <Image
@@ -243,7 +243,7 @@ categories.forEach((cat) => {
                                 href={`/${worthItPost.data.category}/${worthItPost.data.slug}`}
                                 class="group block"
                             >
-                                <div class="border-secondary/25 bg-base-100 hover:border-secondary h-full overflow-hidden rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1">
+                                <div class="border-secondary/25 bg-base-100 hover:border-secondary h-full overflow-hidden rounded-lg border-2 transition-colors duration-200">
                                     {worthItPost.data.image && (
                                         <div class="bg-base-200 aspect-video overflow-hidden">
                                             <Image
@@ -350,7 +350,7 @@ categories.forEach((cat) => {
                     categories.map((cat) => (
                         <a
                             href={`/${cat.slug}`}
-                            class="group border-base-300 hover:border-ink/25 bg-base-100 flex flex-col rounded-2xl border p-5 transition-all hover:-translate-y-1 hover:shadow-[0_18px_38px_-22px_rgba(27,23,20,0.35)]"
+                            class="group border-base-300 hover:border-ink bg-base-100 flex flex-col rounded-lg border p-5 transition-colors"
                         >
                             <CategorySwatch color={cat.swatch} class="h-11 w-11 rounded-xl" />
                             <span class="font-heading text-ink group-hover:text-primary mt-4 font-bold transition-colors">

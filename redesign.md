@@ -125,6 +125,17 @@ cards, (5) trailing "→" link arrows + coral-on-hover heading swaps.
   semantic coral/teal (pros = teal, cons = coral) — they are not section headers.
   (The hero before/after "→" badge is left as-is; it's the documented signature.)
 
+- **#4 Cards — done.** Dropped the uniform `hover:-translate-y-1` + pillowy
+  drop-shadow and squared the corners (`rounded-2xl` → `rounded-lg`) for edge
+  contrast against the pills. Cards are now flat with a hairline border that
+  **snaps to ink on hover** (drafting "selection" feel, `transition-colors`, no
+  lift). Applied to `PostCard`, the home category + Win/Fail feature cards
+  (feature cards keep their coral/teal border), `ReviewSummary`, the post main
+  panel (`shadow-sm` → hairline border), the cover image, the mobile-TOC details,
+  and the empty-state box. Kept: prose-image shadow (body content), floating
+  dropdown shadows (overlays need elevation), the hero signature images, and the
+  rounded-full pills (now contrasted by the squarer cards).
+
 ### Cleanup — done
 
 - Removed `src/pages/variants/` (v1–v4 mockups).
