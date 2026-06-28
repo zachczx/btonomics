@@ -5,7 +5,7 @@ import IconWrench from '~icons/noto/wrench'
 import IconThinking from '~icons/noto/thinking-face'
 
 export interface Category {
-    /** URL slug — also the value posts get after getCategorySlug() */
+    /** URL slug, also the value posts get after getCategorySlug() */
     slug: string
     /** display name (nav, headers) */
     name: string
@@ -25,7 +25,7 @@ export const categories: Category[] = [
         category: 'Renovation',
         icon: IconHammer,
         description:
-            'The messy middle — hacking, screeding, wet works, painting, and the trades who did it.',
+            'The messy middle, hacking, screeding, wet works, painting, and the trades who did it.',
         tintBg: 'bg-softcoral',
         tintText: 'text-primary',
     },
@@ -45,7 +45,7 @@ export const categories: Category[] = [
         category: 'Shopping',
         icon: IconCart,
         description:
-            'Where to buy, what to skip, and how not to overpay — Taobao, IKEA, and everything in between.',
+            'Where to buy, what to skip, and how not to overpay, Taobao, IKEA, and everything in between.',
         tintBg: 'bg-softmarigold',
         tintText: 'text-accent-content',
     },
@@ -55,7 +55,7 @@ export const categories: Category[] = [
         category: 'Maintenance',
         icon: IconWrench,
         description:
-            'Keeping a lived-in HDB running — servicing, cleaning, mould, and the small fixes.',
+            'Keeping a lived-in HDB running, servicing, cleaning, mould, and the small fixes.',
         tintBg: 'bg-softteal',
         tintText: 'text-secondary',
     },
@@ -65,7 +65,7 @@ export const categories: Category[] = [
         category: 'General',
         icon: IconThinking,
         description:
-            'Everything else — the money calls, the neighbours, and the occasional good bowl of noodles.',
+            'Everything else, the money calls, the neighbours, and the occasional good bowl of noodles.',
         tintBg: 'bg-softcoral',
         tintText: 'text-primary',
     },
