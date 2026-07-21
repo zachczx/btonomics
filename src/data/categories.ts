@@ -3,6 +3,8 @@ export interface Category {
     slug: string
     /** display name (nav, headers) */
     name: string
+    /** descriptive browser/search title; Layout appends the site name */
+    metaTitle: string
     /** canonical `category` value in post frontmatter */
     category: string
     description: string
@@ -14,6 +16,7 @@ export const categories: Category[] = [
     {
         slug: 'renovation',
         name: 'Renovation',
+        metaTitle: 'HDB Renovation Guides, Costs & Lessons',
         category: 'Renovation',
         description:
             'The messy middle, hacking, screeding, wet works, painting, and the trades who did it.',
@@ -22,6 +25,7 @@ export const categories: Category[] = [
     {
         slug: 'honest-reviews',
         name: 'Reviews',
+        metaTitle: 'Honest HDB Product & Vendor Reviews',
         category: 'Honest Reviews',
         description:
             'No-sponsor verdicts on the stuff we actually bought and the vendors we actually hired.',
@@ -30,6 +34,7 @@ export const categories: Category[] = [
     {
         slug: 'shopping',
         name: 'Shopping',
+        metaTitle: 'HDB Shopping Guides, Taobao Tips & Savings',
         category: 'Shopping',
         description:
             'Where to buy, what to skip, and how not to overpay, Taobao, IKEA, and everything in between.',
@@ -38,6 +43,7 @@ export const categories: Category[] = [
     {
         slug: 'maintenance',
         name: 'Maintenance',
+        metaTitle: 'HDB Home Maintenance, Cleaning & Repair Guides',
         category: 'Maintenance',
         description:
             'Keeping a lived-in HDB running, servicing, cleaning, mould, and the small fixes.',
@@ -46,6 +52,7 @@ export const categories: Category[] = [
     {
         slug: 'general',
         name: 'General',
+        metaTitle: 'HDB Living, Homeowner Tips & Singapore Stories',
         category: 'General',
         description:
             'Everything else, the money calls, the neighbours, and the occasional good bowl of noodles.',
