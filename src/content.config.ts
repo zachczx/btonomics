@@ -10,7 +10,8 @@ const blog = defineCollection({
         z.object({
             title: z.string(),
             pubDate: z.date(),
-            description: z.string().optional(),
+            // Required because every post uses this as its unique search description.
+            description: z.string().min(1),
             category: z.string(),
             author: z.string(),
             image: image().optional(),

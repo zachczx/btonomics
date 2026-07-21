@@ -23,7 +23,10 @@ const { filtered, related } = Astro.props
 const { tag } = Astro.params
 ---
 
-<Layout title={`#${tag}`}>
+<Layout
+    title={`#${tag}`}
+    description={`Browse ${filtered.length} ${filtered.length === 1 ? 'post' : 'posts'} tagged "${tag}" on BTOnomics, covering honest HDB renovation lessons, reviews, shopping, and home maintenance.`}
+>
     <div class="mb-10" data-pagefind-ignore>
         <nav class="text-ink/55 mb-5 text-sm">
             <a href="/" class="hover:text-primary transition-colors">Home</a>

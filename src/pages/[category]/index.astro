@@ -19,7 +19,7 @@ posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 const others = categories.filter((c) => c.slug !== category)
 ---
 
-<Layout title={cat.name}>
+<Layout title={cat.name} description={cat.description}>
     <!-- Identity header -->
     <div class="mb-10">
         <nav class="text-ink/55 mb-5 text-sm">

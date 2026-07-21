@@ -16,7 +16,10 @@ const postsByCategory = allPosts.reduce((acc: Record<string, CollectionEntry<'bl
 const sortedCategories = Object.keys(postsByCategory).sort()
 ---
 
-<Layout title="Blog">
+<Layout
+    title="Blog"
+    description="Browse every BTOnomics post about HDB renovation, honest product reviews, budget shopping, home maintenance, and lessons from our 4-room BTO."
+>
     <div class="mb-12">
         <SectionHeading
             level="h1"
