@@ -90,16 +90,16 @@ const hasReview = !!(
                     class="text-base-content/55 ledger mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs"
                 >
                     <span>By {d.author}</span>
-                    <span class="opacity-40">·</span>
+                    <span class="opacity-40">/</span>
                     <FormattedDate date={d.pubDate} />
-                    <span class="opacity-40">·</span>
+                    <span class="opacity-40">/</span>
                     <span>{readingTime} min read</span>
                     {
                         d.updated && (
                             <>
-                                <span class="opacity-40">·</span>
+                                <span class="opacity-40">/</span>
                                 <span>
-                                    updated <FormattedDate date={d.updated} />
+                                    updated <FormattedDate date={d.updated} mode="update" />
                                 </span>
                             </>
                         )
@@ -131,6 +131,7 @@ const hasReview = !!(
                             alt={d.title}
                             width={1100}
                             class="max-h-[30rem] w-full rounded-lg object-cover"
+                            style={`object-position: ${d.coverImagePosition ?? 'center'};`}
                         />
                     </figure>
                 )

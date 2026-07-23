@@ -2,18 +2,15 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
-const { date } = Astro.props
+const { date, mode } = Astro.props
 ---
 
 <time datetime={date.toISOString()}>
     <div
         class="tooltip"
-        data-tip={'Posted on ' +
-            date.toLocaleDateString('en-us', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-            })}
+        data-tip={(mode === 'update' ? 'Updated' : 'Published') +
+            ' on ' +
+            dayjs(date).format('D MMM YYYY')}
     >
         {dayjs(date).fromNow()}
     </div>
