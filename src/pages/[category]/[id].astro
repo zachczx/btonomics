@@ -10,6 +10,7 @@ import { Image } from 'astro:assets'
 import Prose from '../../components/Prose.astro'
 import { getCategorySlug, getRelatedPosts } from '../../lib/utils'
 import { getCategoryBySlug } from '../../data/categories'
+import ExpandIcon from '~icons/mingcute/down-line'
 
 export async function getStaticPaths() {
     const blogEntries = await getCollection('blog')
@@ -144,15 +145,10 @@ const hasReview = !!(
                         <details class="group border-base-300 bg-base-200/40 mb-8 rounded-lg border lg:hidden">
                             <summary class="eyebrow text-base-content/60 flex cursor-pointer list-none items-center justify-between px-5 py-3.5 text-[0.7rem] [&::-webkit-details-marker]:hidden">
                                 On this page
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="1.1em"
-                                    height="1.1em"
-                                    viewBox="0 0 24 24"
+                                <ExpandIcon
                                     class="opacity-50 transition-transform group-open:rotate-180"
-                                >
-                                    <path fill="currentColor" d="m12 15l-5-5h10z" />
-                                </svg>
+                                    aria-hidden="true"
+                                />
                             </summary>
                             <div class="px-3 pb-3">
                                 <TableOfContents headings={headings} />

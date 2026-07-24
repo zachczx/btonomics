@@ -8,6 +8,9 @@ import reality from '../images/36_upload_IMG_20180730_204953_header.jpg'
 import { categories } from '../data/categories'
 import CategorySwatch from '../components/CategorySwatch.astro'
 import SectionHeading from '../components/SectionHeading.astro'
+import RatingStars from '../components/RatingStars.astro'
+import BeforeAfterIcon from '~icons/mingcute/arrow-right-fill'
+import SearchIcon from '~icons/mingcute/search-3-line'
 
 const allPosts = await CleanAndSort()
 allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -101,7 +104,7 @@ categories.forEach((cat) => {
                         </div>
                         <span
                             class="eyebrow bg-neutral/90 text-neutral-content absolute top-3 left-3 rounded-full px-2.5 py-1 text-[0.55rem]"
-                            >Before · the plan</span
+                            >Before / the plan</span
                         >
                     </figure>
                     <figure class="relative">
@@ -119,14 +122,15 @@ categories.forEach((cat) => {
                         </div>
                         <span
                             class="eyebrow bg-secondary text-secondary-content absolute top-3 left-3 rounded-full px-2.5 py-1 text-[0.55rem]"
-                            >After · the reality</span
+                            >After / the reality</span
                         >
                     </figure>
                 </div>
                 <div
-                    class="bg-neutral text-neutral-content absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-xl font-bold shadow-lg"
+                    class="bg-neutral text-neutral-content absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full shadow-lg"
+                    aria-hidden="true"
                 >
-                    →
+                    <BeforeAfterIcon class="h-6 w-6" />
                 </div>
                 <p class="eyebrow text-ink/40 mt-4 text-center text-[0.58rem]">
                     Our actual living room, the 3D render vs. move-in day
@@ -143,15 +147,15 @@ categories.forEach((cat) => {
             <span class="ledger text-ink/55">
                 <strong class="text-ink text-lg font-extrabold">{postCount}</strong> posts
             </span>
-            <span class="text-ink/20" aria-hidden="true">·</span>
+            <span class="text-ink/20" aria-hidden="true">/</span>
             <span class="ledger text-ink/55">
                 <strong class="text-ink text-lg font-extrabold">{yearsDocumented}</strong> years
             </span>
-            <span class="text-ink/20" aria-hidden="true">·</span>
+            <span class="text-ink/20" aria-hidden="true">/</span>
             <span class="ledger text-ink/55">
                 <strong class="text-ink text-lg font-extrabold">{verdictCount}</strong> honest verdicts
             </span>
-            <span class="text-ink/20" aria-hidden="true">·</span>
+            <span class="text-ink/20" aria-hidden="true">/</span>
             <span class="ledger text-ink/55">
                 <strong class="text-secondary text-lg font-extrabold">{winCount}</strong> wins /
                 <strong class="text-primary text-lg font-extrabold">{failCount}</strong> fails
@@ -204,24 +208,14 @@ categories.forEach((cat) => {
                                         <div class="mt-3 flex flex-wrap items-center gap-3">
                                             {regretPost.data.rating != null && (
                                                 <span
-                                                    class="flex items-center gap-0.5"
+                                                    class="flex items-center gap-1"
                                                     title={`${regretPost.data.rating} out of 5`}
                                                 >
-                                                    {[1, 2, 3, 4, 5].map((i) => (
-                                                        <span
-                                                            class={
-                                                                i <=
-                                                                Math.round(
-                                                                    regretPost.data.rating ?? 0,
-                                                                )
-                                                                    ? 'text-error text-sm'
-                                                                    : 'text-base-300 text-sm'
-                                                            }
-                                                        >
-                                                            ★
-                                                        </span>
-                                                    ))}
-                                                    <span class="ledger text-ink/45 ml-1 text-xs">
+                                                    <RatingStars
+                                                        rating={regretPost.data.rating}
+                                                        tone="primary"
+                                                    />
+                                                    <span class="ledger text-ink/45 text-xs">
                                                         {regretPost.data.rating}/5
                                                     </span>
                                                 </span>
@@ -269,24 +263,11 @@ categories.forEach((cat) => {
                                         <div class="mt-3 flex flex-wrap items-center gap-3">
                                             {worthItPost.data.rating != null && (
                                                 <span
-                                                    class="flex items-center gap-0.5"
+                                                    class="flex items-center gap-1"
                                                     title={`${worthItPost.data.rating} out of 5`}
                                                 >
-                                                    {[1, 2, 3, 4, 5].map((i) => (
-                                                        <span
-                                                            class={
-                                                                i <=
-                                                                Math.round(
-                                                                    worthItPost.data.rating ?? 0,
-                                                                )
-                                                                    ? 'text-secondary text-sm'
-                                                                    : 'text-base-300 text-sm'
-                                                            }
-                                                        >
-                                                            ★
-                                                        </span>
-                                                    ))}
-                                                    <span class="ledger text-ink/45 ml-1 text-xs">
+                                                    <RatingStars rating={worthItPost.data.rating} />
+                                                    <span class="ledger text-ink/45 text-xs">
                                                         {worthItPost.data.rating}/5
                                                     </span>
                                                 </span>
@@ -320,20 +301,7 @@ categories.forEach((cat) => {
                 href="/search"
                 class="border-base-300 bg-base-100 hover:border-ink/30 group flex items-center gap-3 rounded-full border-2 px-5 py-3.5 transition-colors"
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.15em"
-                    height="1.15em"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    class="text-ink/40 shrink-0"
-                >
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <path d="m21 21-4.3-4.3"></path>
-                </svg>
+                <SearchIcon class="text-ink/40 h-[1.15em] w-[1.15em] shrink-0" aria-hidden="true" />
                 <span class="text-ink/45 truncate"
                     >Search {postCount} posts: vinyl, Taobao, aircon…</span
                 >

@@ -1,6 +1,9 @@
 ---
 import { categories } from '../data/categories'
 import CategorySwatch from './CategorySwatch.astro'
+import DropdownIcon from '~icons/mingcute/down-line'
+import SearchIcon from '~icons/mingcute/search-3-line'
+import MenuIcon from '~icons/mingcute/menu-line'
 ---
 
 <header
@@ -23,15 +26,7 @@ import CategorySwatch from './CategorySwatch.astro'
                     class="text-ink/75 hover:bg-softcoral hover:text-primary inline-flex items-center gap-1 rounded-full px-4 py-2 font-semibold transition-colors"
                 >
                     Browse
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 24 24"
-                        class="opacity-60"
-                    >
-                        <path fill="currentColor" d="m12 15l-5-5h10z"></path>
-                    </svg>
+                    <DropdownIcon class="h-4 w-4 opacity-60" aria-hidden="true" />
                 </div>
                 <ul
                     tabindex="0"
@@ -71,38 +66,14 @@ import CategorySwatch from './CategorySwatch.astro'
                 href="/search"
                 class="bg-neutral text-neutral-content ml-1 inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold transition-transform hover:-translate-y-0.5"
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                >
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <path d="m21 21-4.3-4.3"></path>
-                </svg>
+                <SearchIcon class="h-4 w-4" aria-hidden="true" />
                 Search
             </a>
         </div>
 
         <div class="dropdown dropdown-end lg:hidden">
             <div tabindex="0" role="button" class="btn btn-ghost btn-sm" aria-label="Menu">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
+                <MenuIcon class="h-5 w-5" aria-hidden="true" />
             </div>
             <ul
                 tabindex="0"

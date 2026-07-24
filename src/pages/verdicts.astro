@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro'
 import PostGrid from '../components/PostGrid.astro'
 import SectionHeading from '../components/SectionHeading.astro'
 import { CleanAndSort } from '../lib/utils'
+import RatingIcon from '~icons/mingcute/star-fill'
 
 const allPosts = await CleanAndSort()
 const rated = allPosts.filter((p) => p.data.rating != null || p.data.verdict)
@@ -34,10 +35,12 @@ const failCount = rated.filter((p) => p.data.mood === 'negative').length
                 <strong class="text-base-content text-lg font-extrabold">{rated.length}</strong> verdicts
             </span>
             <span class="text-ink/20" aria-hidden="true">·</span>
-            <span>
+            <span class="inline-flex items-center gap-1">
                 <strong class="text-accent-content text-lg font-extrabold">
                     {avgRating.toFixed(1)}
-                </strong> avg ★
+                </strong>
+                avg
+                <RatingIcon class="text-accent-content h-4 w-4" aria-hidden="true" />
             </span>
             <span class="text-ink/20" aria-hidden="true">·</span>
             <span>

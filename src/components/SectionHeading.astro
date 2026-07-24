@@ -1,4 +1,6 @@
 ---
+import ActionIcon from '~icons/mingcute/arrow-right-line'
+
 // Section/page header in the architect's-drawing language: a bold heading over a
 // hairline "dimension line" (end-ticks + rule), with the former coral kicker
 // demoted to a small ink annotation below — like a measured note on a drawing.
@@ -34,22 +36,10 @@ const Heading = level
                     class="text-ink/55 hover:text-primary group/action mb-1.5 inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold transition-colors"
                 >
                     {action.label}
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="transition-transform group-hover/action:translate-x-0.5"
+                    <ActionIcon
+                        class="h-4 w-4 transition-transform group-hover/action:translate-x-0.5"
                         aria-hidden="true"
-                    >
-                        <path d="M5 12h14" />
-                        <path d="m12 5 7 7-7 7" />
-                    </svg>
+                    />
                 </a>
             )
         }

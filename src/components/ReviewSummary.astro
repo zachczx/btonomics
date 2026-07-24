@@ -1,4 +1,11 @@
 ---
+import RatingStars from './RatingStars.astro'
+import RecommendYesIcon from '~icons/mingcute/check-circle-fill'
+import RecommendNoIcon from '~icons/mingcute/close-circle-fill'
+import RecommendMaybeIcon from '~icons/mingcute/question-fill'
+import ProIcon from '~icons/mingcute/add-circle-fill'
+import ConIcon from '~icons/mingcute/minus-circle-fill'
+
 interface Props {
     verdict?: string
     recommend?: 'yes' | 'no' | 'maybe'
@@ -10,11 +17,16 @@ interface Props {
 const { verdict, recommend, rating, cost, pros = [], cons = [] } = Astro.props
 
 const recMap = {
-    yes: { label: 'Would do again', tint: 'bg-softteal text-secondary', icon: '✓' },
-    no: { label: 'Would skip', tint: 'bg-softcoral text-primary', icon: '✕' },
-    maybe: { label: 'It depends', tint: 'bg-softmarigold text-accent-content', icon: '~' },
+    yes: { label: 'Would do again', tint: 'bg-softteal text-secondary', icon: RecommendYesIcon },
+    no: { label: 'Would skip', tint: 'bg-softcoral text-primary', icon: RecommendNoIcon },
+    maybe: {
+        label: 'It depends',
+        tint: 'bg-softmarigold text-accent-content',
+        icon: RecommendMaybeIcon,
+    },
 } as const
 const rec = recommend ? recMap[recommend] : null
+const RecommendationIcon = rec?.icon
 const hasFigures = !!cost || !!rec
 const hasLists = pros.length > 0 || cons.length > 0
 ---
@@ -27,19 +39,7 @@ const hasLists = pros.length > 0 || cons.length > 0
             {
                 rating != null && (
                     <span class="flex items-center gap-1.5" title={`${rating} out of 5`}>
-                        <span class="flex items-center gap-0.5">
-                            {[1, 2, 3, 4, 5].map((i) => (
-                                <span
-                                    class={
-                                        i <= Math.round(rating)
-                                            ? 'text-secondary text-sm'
-                                            : 'text-base-300 text-sm'
-                                    }
-                                >
-                                    ★
-                                </span>
-                            ))}
-                        </span>
+                        <RatingStars rating={rating} />
                         <span class="ledger text-ink/50 text-xs font-semibold">{rating}/5</span>
                     </span>
                 )
@@ -72,7 +72,12 @@ const hasLists = pros.length > 0 || cons.length > 0
                                     The call
                                 </span>
                                 <span class="mt-0.5 flex items-center gap-1.5 text-lg font-bold">
-                                    <span>{rec.icon}</span>
+                                    {RecommendationIcon && (
+                                        <RecommendationIcon
+                                            class="h-5 w-5 shrink-0"
+                                            aria-hidden="true"
+                                        />
+                                    )}
                                     {rec.label}
                                 </span>
                             </div>
@@ -92,9 +97,10 @@ const hasLists = pros.length > 0 || cons.length > 0
                                 <ul class="mt-2.5 space-y-2">
                                     {pros.map((p) => (
                                         <li class="text-ink/80 flex gap-2.5 text-sm leading-snug">
-                                            <span class="bg-softteal text-secondary mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[0.65rem] font-bold">
-                                                +
-                                            </span>
+                                            <ProIcon
+                                                class="text-secondary mt-0.5 h-4 w-4 shrink-0"
+                                                aria-hidden="true"
+                                            />
                                             <span>{p}</span>
                                         </li>
                                     ))}
@@ -109,9 +115,10 @@ const hasLists = pros.length > 0 || cons.length > 0
                                 <ul class="mt-2.5 space-y-2">
                                     {cons.map((c) => (
                                         <li class="text-ink/80 flex gap-2.5 text-sm leading-snug">
-                                            <span class="bg-softcoral text-primary mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[0.65rem] font-bold">
-                                                –
-                                            </span>
+                                            <ConIcon
+                                                class="text-primary mt-0.5 h-4 w-4 shrink-0"
+                                                aria-hidden="true"
+                                            />
                                             <span>{c}</span>
                                         </li>
                                     ))}
