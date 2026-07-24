@@ -19,9 +19,10 @@ import SectionHeading from '../components/SectionHeading.astro'
          web components; we compose them inline for a full-page search experience. -->
     <PagefindConfig />
 
-    <div class="pf-page mx-auto max-w-2xl">
-        <pagefind-input placeholder="Search posts…" autofocus></pagefind-input>
-        <pagefind-summary class="pf-page-summary"></pagefind-summary>
+    <div class="search-page">
+        <pagefind-input class="search-page-input" placeholder="Search posts…" autofocus
+        ></pagefind-input>
+        <pagefind-summary class="search-page-summary"></pagefind-summary>
         <pagefind-results></pagefind-results>
     </div>
 </Layout>
@@ -48,7 +49,15 @@ import SectionHeading from '../components/SectionHeading.astro'
         --pf-shadow-lg: 0 18px 44px rgba(27, 23, 20, 0.16);
     }
 
-    .pf-page-summary {
+    .search-page {
+        width: 100%;
+        max-width: 42rem;
+    }
+    pagefind-input.search-page-input {
+        width: 100%;
+        max-width: 36rem;
+    }
+    .search-page-summary {
         display: block;
         margin-top: 1.5rem;
     }
