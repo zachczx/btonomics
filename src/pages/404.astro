@@ -1,0 +1,82 @@
+---
+import '../styles/global.css'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../layouts/Footer.astro'
+import { categories } from '../data/categories'
+---
+
+<!doctype html>
+<html lang="en" data-theme="hometheme">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="description"
+            content="The page you were looking for is not part of the BTOnomics renovation diary."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="robots" content="noindex, follow" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Page not found | BTOnomics</title>
+    </head>
+    <body class="bg-base-200 font-body">
+        <Navbar />
+
+        <main
+            class="bg-paper border-base-300 relative isolate min-h-[68vh] overflow-hidden border-y"
+        >
+            <div class="blueprint absolute inset-0 -z-10 opacity-30" aria-hidden="true"></div>
+
+            <div
+                class="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-20 sm:px-8 md:grid-cols-[0.7fr_1.3fr] md:gap-16 md:py-28"
+            >
+                <p
+                    class="ledger font-heading text-primary text-[clamp(7rem,25vw,15rem)] leading-[0.7] font-extrabold tracking-[-0.04em]"
+                    aria-hidden="true"
+                >
+                    404
+                </p>
+
+                <div class="max-w-2xl">
+                    <p class="eyebrow text-primary mb-5 text-xs">Page not found</p>
+                    <h1
+                        class="font-heading text-ink max-w-xl text-4xl font-extrabold text-balance sm:text-6xl"
+                    >
+                        This room isn't on the <span class="marker">floor plan.</span>
+                    </h1>
+                    <p class="text-ink/70 mt-6 max-w-xl text-lg leading-relaxed sm:text-xl">
+                        The link may come from an older version of BTOnomics, or the address may
+                        have taken a wrong turn. Try the homepage, search the diary, or pick up from
+                        a section below.
+                    </p>
+
+                    <div class="mt-8 flex flex-wrap gap-3">
+                        <a href="/" class="btn btn-neutral">Return home</a>
+                        <a href="/search" class="btn btn-outline">Search the diary</a>
+                    </div>
+
+                    <nav class="border-base-300 mt-10 border-t pt-6" aria-label="Browse categories">
+                        <p class="eyebrow text-ink/55 mb-4 text-[0.65rem]">Browse by category</p>
+                        <ul class="flex flex-wrap gap-x-5 gap-y-3">
+                            {
+                                categories.map((category) => (
+                                    <li>
+                                        <a
+                                            href={`/${category.slug}`}
+                                            class="text-ink decoration-primary hover:text-primary font-semibold underline decoration-2 underline-offset-4 transition-colors"
+                                        >
+                                            {category.name}
+                                        </a>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </main>
+
+        <Footer />
+    </body>
+</html>
