@@ -1,8 +1,6 @@
 ---
 import { categories } from '../data/categories'
 import BackToTopIcon from '~icons/mingcute/arrow-up-line'
-
-const year = new Date().getFullYear()
 ---
 
 <footer class="bg-neutral text-neutral-content mt-20">
@@ -71,7 +69,8 @@ const year = new Date().getFullYear()
             class="border-neutral-content/15 mt-12 flex flex-col items-center justify-between gap-4 border-t pt-6 sm:flex-row"
         >
             <div class="text-neutral-content/55 text-xs">
-                © {year} Zixian Chen · All rights reserved
+                © <a href="https://zixianchen.com" class="font-medium underline">Zixian Chen</a> · All
+                rights reserved
             </div>
             <button
                 onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
