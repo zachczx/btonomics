@@ -10,6 +10,8 @@ import Icons from 'unplugin-icons/vite'
 import { categories } from './src/data/categories'
 
 const blogDirectory = fileURLToPath(new URL('./src/data/blog/', import.meta.url))
+// Every post's rendered meta description changed when descriptions became post-specific.
+const postDescriptionRefreshDate = new Date('2026-08-01').valueOf()
 
 function findBlogPosts(directory) {
     return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -39,7 +41,10 @@ const postLastModified = new Map(
         }
 
         const modified = new Date(
-            Math.max(...[published, updated].filter(Boolean).map((date) => new Date(date).valueOf())),
+            Math.max(
+                postDescriptionRefreshDate,
+                ...[published, updated].filter(Boolean).map((date) => new Date(date).valueOf()),
+            ),
         )
 
         return [`/${categorySlug}/${slug}`, modified.toISOString()]
