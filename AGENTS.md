@@ -31,7 +31,7 @@ Frontmatter schema (Zod, in `content.config.ts`):
 - Optional presentation fields: `image`, `coverImagePosition` (`top`, `center`, or `bottom`), `tags` (string[]), `slug`, `mood`, and `updated` (date).
 - Optional review fields: `verdict`, `recommend` (`yes`, `no`, or `maybe`), `rating` (0–5), `cost`, `pros` (string[]), and `cons` (string[]).
 
-Although `slug` is optional in the schema for migrated content compatibility, the post route uses it as `[id]`; new posts must set it to the post directory name. Current `mood` values are `positive`, `negative`, and `neutral`: they render as Win/Fail/Lesson treatments, while only positive and negative posts count toward Win/Fail filters and homepage picks.
+Although `slug` is optional in the schema for migrated content compatibility, the post route uses it as `[id]`; new posts must set it to the post directory name. Current `mood` values are `positive`, `negative`, and `neutral`: they render as Win/Fail/Lesson treatments, and all three are available in mood filters. Homepage featured picks still select positive and negative posts.
 
 ### The category system (one axis)
 
@@ -48,11 +48,11 @@ There is **one** browse axis: the `category` string in each post's frontmatter �
 - `/` (`pages/index.astro`) — hero, Win/Fail cards (by `mood`), latest 6 posts, Browse-by-category cards (counts by `category`), "See all verdicts" link.
 - `/[category]/` — one of the 5 category listings; paint-chip identity header, count, breadcrumb, sortable post grid (`<PostGrid>`), "keep browsing" switcher.
 - `/[category]/[id]` — a post; `id` is the post `slug`. Renders MDX `<Content />` inside `<Prose>` with a sticky `<TableOfContents>` (plus a collapsible mobile TOC) built from `render()` headings, a byline read-time estimate, and a "Keep reading" related-posts grid (`getRelatedPosts`).
-- `/verdicts` — cross-category hub of every post carrying a `rating`/`verdict`; `<PostGrid>` with sort + Win/Fail filter, defaulting to highest-rated.
+- `/verdicts` — cross-category hub of every post carrying review data (`verdict`, `recommend`, `rating`, `cost`, `pros`, or `cons`); `<PostGrid>` with sort + All/Wins/Lessons/Fails filter, defaulting to highest-rated.
 - `/tag/[tag]` — posts for a tag, with a "often appears with" related-tags row (`getRelatedTags`).
 - `/blog`, `/about-us`, `/search`.
 
-Post-sorting, tag, category, and recommendation helpers live in `src/lib/utils.ts` (`CleanAndSort`, `FilterCleanSort`, `GetUniqueTags`, `getRelatedTags`, `getCategorySlug`, `getRelatedPosts`). `CleanAndSort()` mutates each loaded entry's `data.category` from its canonical display value to the URL slug before sorting newest-first; code consuming its result must account for that. `src/components/PostGrid.astro` is the client-enhanced grid (sort Newest/Oldest/Highest-rated + optional All/Wins/Fails mood filter); it re-inits on `astro:page-load` and reads `data-date`/`-rating`/`-mood` off each `PostCard`. Cost is deliberately not a sort key — the field is free-text and non-comparable.
+Post-sorting, tag, category, and related-post helpers live in `src/lib/utils.ts` (`CleanAndSort`, `FilterCleanSort`, `GetUniqueTags`, `getRelatedTags`, `getCategorySlug`, `getRelatedPosts`). Mood and review presentation lives in `src/lib/post-semantics.ts` (`MOOD_META`, `MOOD_FILTERS`, `RECOMMENDATION_META`, `hasReviewData`, `isReviewPost`). `CleanAndSort()` mutates each loaded entry's `data.category` from its canonical display value to the URL slug before sorting newest-first; code consuming its result must account for that. `src/components/PostGrid.astro` is the client-enhanced grid (sort Newest/Oldest/Highest-rated + optional All/Wins/Lessons/Fails mood filter); it re-inits on `astro:page-load` and reads `data-date`/`-rating`/`-mood` off each `PostCard`. Cost is deliberately not a sort key — the field is free-text and non-comparable.
 
 ### Search (Pagefind)
 
