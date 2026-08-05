@@ -1,12 +1,13 @@
 ---
 import PostCard from './PostCard.astro'
 import type { CollectionEntry } from 'astro:content'
+import { MOOD_FILTERS } from '../lib/post-semantics'
 
 interface Props {
     posts: CollectionEntry<'blog'>[]
     /** show the Newest / Oldest / Highest-rated sort control */
     sortable?: boolean
-    /** show the All / Wins / Fails (mood) filter control */
+    /** show the All / Wins / Lessons / Fails (mood) filter control */
     filterable?: boolean
     /** which sort option is selected on load */
     defaultSort?: 'newest' | 'oldest' | 'rating'
@@ -22,11 +23,7 @@ const {
 } = Astro.props
 
 const interactive = sortable || filterable
-const filters = [
-    { value: 'all', label: 'All' },
-    { value: 'positive', label: 'Wins' },
-    { value: 'negative', label: 'Fails' },
-]
+const filters = [{ value: 'all', label: 'All' }, ...MOOD_FILTERS]
 const sorts = [
     { value: 'newest', label: 'Newest' },
     { value: 'oldest', label: 'Oldest' },

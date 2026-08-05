@@ -8,6 +8,7 @@ import SectionHeading from '../../components/SectionHeading.astro'
 import { getCollection, render } from 'astro:content'
 import { Image } from 'astro:assets'
 import Prose from '../../components/Prose.astro'
+import { getMoodMeta, isReviewPost } from '../../lib/post-semantics'
 import { getCategorySlug, getRelatedPosts } from '../../lib/utils'
 import { getCategoryBySlug } from '../../data/categories'
 import ExpandIcon from '~icons/mingcute/down-line'
@@ -30,20 +31,14 @@ const d = entry.data
 
 const categorySlug = getCategorySlug(d.category)
 const categoryName = getCategoryBySlug(categorySlug)?.name ?? d.category
+const mood = getMoodMeta(d.mood)
 
 // Rough reading estimate from the raw body (~200 wpm).
 const wordCount = entry.body?.trim().split(/\s+/).filter(Boolean).length ?? 0
 const readingTime = Math.max(1, Math.round(wordCount / 200))
 
 const relatedPosts = getRelatedPosts(await getCollection('blog'), entry, 3)
-
-const hasReview = !!(
-    d.verdict ||
-    d.cost ||
-    d.rating != null ||
-    (d.pros && d.pros.length) ||
-    (d.cons && d.cons.length)
-)
+const hasReview = isReviewPost(entry)
 ---
 
 <Layout title={d.title} description={d.description}>
@@ -60,15 +55,11 @@ const hasReview = !!(
                 </nav>
 
                 {
-                    d.mood && (
+                    mood && (
                         <span
-                            class={`eyebrow mb-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.65rem] ${d.mood === 'positive' ? 'bg-success/12 text-success' : d.mood === 'negative' ? 'bg-error/12 text-error' : 'bg-base-200 text-base-content/60'}`}
+                            class={`eyebrow mb-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.65rem] ${mood.badgeClass}`}
                         >
-                            {d.mood === 'positive'
-                                ? 'A win'
-                                : d.mood === 'negative'
-                                  ? 'A regret'
-                                  : 'A lesson'}
+                            {mood.articleLabel}
                         </span>
                     )
                 }

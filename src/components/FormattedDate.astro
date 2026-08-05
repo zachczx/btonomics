@@ -1,17 +1,23 @@
 ---
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+
 dayjs.extend(relativeTime)
-const { date, mode } = Astro.props
+
+interface Props {
+    date: Date
+    mode?: 'update'
+    class?: string
+}
+
+const { date, mode, class: className } = Astro.props
+const label = mode === 'update' ? 'Updated' : 'Published'
 ---
 
-<time datetime={date.toISOString()}>
-    <div
-        class="tooltip"
-        data-tip={(mode === 'update' ? 'Updated' : 'Published') +
-            ' on ' +
-            dayjs(date).format('D MMM YYYY')}
-    >
-        {dayjs(date).fromNow()}
-    </div>
+<time
+    datetime={date.toISOString()}
+    class:list={['tooltip', className]}
+    data-tip={`${label} on ${dayjs(date).format('D MMM YYYY')}`}
+>
+    {dayjs(date).fromNow()}
 </time>

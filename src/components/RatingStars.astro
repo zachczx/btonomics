@@ -9,8 +9,8 @@ interface Props {
 }
 
 const { rating, tone = 'secondary', class: className } = Astro.props
-const roundedRating = Math.round(rating)
-const stars = [1, 2, 3, 4, 5].map((position) => position <= roundedRating)
+const safeRating = Math.min(5, Math.max(0, rating))
+const stars = [0, 1, 2, 3, 4].map((position) => Math.min(1, Math.max(0, safeRating - position)))
 const filledTone = {
     primary: 'text-primary',
     secondary: 'text-secondary',
@@ -21,15 +21,24 @@ const filledTone = {
 <span
     class:list={['inline-flex items-center gap-0.5', className]}
     role="img"
-    aria-label={`${rating} out of 5 stars`}
+    aria-label={`${safeRating} out of 5 stars`}
 >
     {
-        stars.map((filled) =>
-            filled ? (
-                <StarFilled class={`h-3.5 w-3.5 ${filledTone}`} aria-hidden="true" />
-            ) : (
-                <StarEmpty class="text-base-300 h-3.5 w-3.5" aria-hidden="true" />
-            ),
-        )
+        stars.map((fill) => (
+            <span class="relative inline-block h-3.5 w-3.5 shrink-0">
+                <StarEmpty class="text-base-300 absolute inset-0 h-3.5 w-3.5" aria-hidden="true" />
+                {fill > 0 && (
+                    <span
+                        class="absolute inset-y-0 left-0 overflow-hidden"
+                        style={`width: ${fill * 100}%`}
+                    >
+                        <StarFilled
+                            class={`absolute top-0 left-0 h-3.5 w-3.5 max-w-none ${filledTone}`}
+                            aria-hidden="true"
+                        />
+                    </span>
+                )}
+            </span>
+        ))
     }
 </span>
