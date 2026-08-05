@@ -44,8 +44,11 @@ jobs:
             - name: Check Astro and TypeScript
               run: pnpm astro check
 
-            - name: Check formatting
-              run: pnpm exec prettier --check .
+            - name: Show expected formatting
+              run: |
+                  pnpm exec prettier --write src/layouts/Layout.astro
+                  git diff -- src/layouts/Layout.astro
+                  exit 1
 
             - name: Lint code
               run: pnpm exec eslint .
