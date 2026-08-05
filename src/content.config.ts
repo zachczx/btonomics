@@ -2,7 +2,6 @@
 import { defineCollection } from 'astro:content'
 import { z } from 'astro/zod'
 import { glob } from 'astro/loaders'
-import { fileURLToPath } from 'node:url'
 
 // 2. Define your collection(s)
 const blog = defineCollection({
