@@ -1,5 +1,6 @@
 ---
 import RatingStars from './RatingStars.astro'
+import { getRecommendationMeta, type Recommendation } from '../lib/post-semantics'
 import RecommendYesIcon from '~icons/mingcute/check-circle-fill'
 import RecommendNoIcon from '~icons/mingcute/close-circle-fill'
 import RecommendMaybeIcon from '~icons/mingcute/question-fill'
@@ -8,7 +9,7 @@ import ConIcon from '~icons/mingcute/minus-circle-fill'
 
 interface Props {
     verdict?: string
-    recommend?: 'yes' | 'no' | 'maybe'
+    recommend?: Recommendation
     rating?: number
     cost?: string
     pros?: string[]
@@ -16,17 +17,13 @@ interface Props {
 }
 const { verdict, recommend, rating, cost, pros = [], cons = [] } = Astro.props
 
-const recMap = {
-    yes: { label: 'Would do again', tint: 'bg-softteal text-secondary', icon: RecommendYesIcon },
-    no: { label: 'Would skip', tint: 'bg-softcoral text-primary', icon: RecommendNoIcon },
-    maybe: {
-        label: 'It depends',
-        tint: 'bg-softmarigold text-accent-content',
-        icon: RecommendMaybeIcon,
-    },
+const recommendationIcons = {
+    yes: RecommendYesIcon,
+    no: RecommendNoIcon,
+    maybe: RecommendMaybeIcon,
 } as const
-const rec = recommend ? recMap[recommend] : null
-const RecommendationIcon = rec?.icon
+const rec = getRecommendationMeta(recommend)
+const RecommendationIcon = recommend ? recommendationIcons[recommend] : null
 const hasFigures = !!cost || !!rec
 const hasLists = pros.length > 0 || cons.length > 0
 ---
@@ -67,7 +64,7 @@ const hasLists = pros.length > 0 || cons.length > 0
                             </div>
                         )}
                         {rec && (
-                            <div class={`rounded-xl px-4 py-3 ${rec.tint}`}>
+                            <div class={`rounded-xl px-4 py-3 ${rec.tintClass}`}>
                                 <span class="eyebrow block text-[0.58rem] opacity-65">
                                     The call
                                 </span>

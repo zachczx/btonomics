@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro'
 import PostCard from '../components/PostCard.astro'
 import { Image } from 'astro:assets'
+import { getMoodMeta, isReviewPost } from '../lib/post-semantics'
 import { CleanAndSort } from '../lib/utils'
 import vision from '../images/3_concept1_header-topaz-enhance-4x.webp'
 import reality from '../images/36_upload_IMG_20180730_204953_header.jpg'
@@ -16,24 +17,27 @@ const allPosts = await CleanAndSort()
 allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 const latestPosts = allPosts.slice(0, 6)
 
-// Honest-truth picks: prefer posts that actually carry a verdict, by rating extremes,
+// Honest-truth picks: prefer posts that carry review data, by rating extremes,
 // so the cards show real receipts (cost + rating) rather than just a title.
-const withVerdict = allPosts.filter((p) => p.data.verdict)
+const reviewPosts = allPosts.filter(isReviewPost)
 const worthItPost =
-    withVerdict
+    reviewPosts
         .filter((p) => p.data.mood === 'positive')
         .sort((a, b) => (b.data.rating ?? 0) - (a.data.rating ?? 0))[0] ||
     allPosts.find((p) => p.data.mood === 'positive')
 const regretPost =
-    withVerdict
+    reviewPosts
         .filter((p) => p.data.mood === 'negative')
         .sort((a, b) => (a.data.rating ?? 5) - (b.data.rating ?? 5))[0] ||
     allPosts.find((p) => p.data.mood === 'negative')
+const worthItMood = getMoodMeta(worthItPost?.data.mood)
+const regretMood = getMoodMeta(regretPost?.data.mood)
 
 // "Receipts" stats
 const postCount = allPosts.length
-const verdictCount = withVerdict.length
+const reviewCount = reviewPosts.length
 const winCount = allPosts.filter((p) => p.data.mood === 'positive').length
+const lessonCount = allPosts.filter((p) => p.data.mood === 'neutral').length
 const failCount = allPosts.filter((p) => p.data.mood === 'negative').length
 const startYear = Math.min(...allPosts.map((p) => p.data.pubDate.getFullYear()))
 const yearsDocumented = Math.max(1, new Date().getFullYear() - startYear)
@@ -153,11 +157,12 @@ categories.forEach((cat) => {
             </span>
             <span class="text-ink/20" aria-hidden="true">/</span>
             <span class="ledger text-ink/55">
-                <strong class="text-ink text-lg font-extrabold">{verdictCount}</strong> honest verdicts
+                <strong class="text-ink text-lg font-extrabold">{reviewCount}</strong> honest verdicts
             </span>
             <span class="text-ink/20" aria-hidden="true">/</span>
             <span class="ledger text-ink/55">
                 <strong class="text-secondary text-lg font-extrabold">{winCount}</strong> wins /
+                <strong class="text-ink text-lg font-extrabold">{lessonCount}</strong> lessons /
                 <strong class="text-primary text-lg font-extrabold">{failCount}</strong> fails
             </span>
         </div>
@@ -170,7 +175,7 @@ categories.forEach((cat) => {
                 <div class="container mx-auto px-4">
                     <SectionHeading
                         title="The honest truth"
-                        note={`${verdictCount} verdicts on record`}
+                        note={`${reviewCount} verdicts on record`}
                         action={{ href: '/verdicts', label: 'See all verdicts' }}
                         class="mb-9"
                     />
@@ -193,10 +198,16 @@ categories.forEach((cat) => {
                                         </div>
                                     )}
                                     <div class="p-5">
-                                        <span class="text-error inline-flex items-center gap-1.5 text-sm font-semibold">
-                                            <span class="bg-error h-2.5 w-2.5 rounded-full" />
-                                            Fail
-                                        </span>
+                                        {regretMood && (
+                                            <span
+                                                class={`inline-flex items-center gap-1.5 text-sm font-semibold ${regretMood.textClass}`}
+                                            >
+                                                <span
+                                                    class={`h-2.5 w-2.5 rounded-full ${regretMood.dotClass}`}
+                                                />
+                                                {regretMood.cardLabel}
+                                            </span>
+                                        )}
                                         <h3 class="text-ink group-hover:text-primary mt-3 text-lg font-bold transition-colors">
                                             {regretPost.data.title}
                                         </h3>
@@ -248,10 +259,16 @@ categories.forEach((cat) => {
                                         </div>
                                     )}
                                     <div class="p-5">
-                                        <span class="text-secondary inline-flex items-center gap-1.5 text-sm font-semibold">
-                                            <span class="bg-secondary h-2.5 w-2.5 rounded-full" />
-                                            Win
-                                        </span>
+                                        {worthItMood && (
+                                            <span
+                                                class={`inline-flex items-center gap-1.5 text-sm font-semibold ${worthItMood.textClass}`}
+                                            >
+                                                <span
+                                                    class={`h-2.5 w-2.5 rounded-full ${worthItMood.dotClass}`}
+                                                />
+                                                {worthItMood.cardLabel}
+                                            </span>
+                                        )}
                                         <h3 class="text-ink group-hover:text-secondary mt-3 text-lg font-bold transition-colors">
                                             {worthItPost.data.title}
                                         </h3>

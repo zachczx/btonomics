@@ -1,11 +1,9 @@
 ---
 import { Image } from 'astro:assets'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import type { CollectionEntry } from 'astro:content'
+import FormattedDate from './FormattedDate.astro'
+import { getMoodMeta } from '../lib/post-semantics'
 import { getCategorySlug } from '../lib/utils'
-
-dayjs.extend(relativeTime)
 
 interface Props {
     post: CollectionEntry<'blog'>
@@ -13,6 +11,7 @@ interface Props {
 const { post } = Astro.props
 const d = post.data
 const href = `/${getCategorySlug(d.category)}/${d.slug || post.id}`
+const mood = getMoodMeta(d.mood)
 ---
 
 <article
@@ -47,14 +46,12 @@ const href = `/${getCategorySlug(d.category)}/${d.slug || post.id}`
             <div class="p-5">
                 <div class="flex items-center gap-2">
                     {
-                        d.mood ? (
+                        mood ? (
                             <span
-                                class={`inline-flex items-center gap-1.5 text-xs font-semibold ${d.mood === 'positive' ? 'text-secondary' : 'text-error'}`}
+                                class={`inline-flex items-center gap-1.5 text-xs font-semibold ${mood.textClass}`}
                             >
-                                <span
-                                    class={`h-2 w-2 rounded-full ${d.mood === 'positive' ? 'bg-secondary' : 'bg-error'}`}
-                                />
-                                {d.mood === 'positive' ? 'Win' : 'Fail'}
+                                <span class={`h-2 w-2 rounded-full ${mood.dotClass}`} />
+                                {mood.cardLabel}
                             </span>
                         ) : (
                             <span class="eyebrow bg-softteal text-secondary rounded-full px-2.5 py-1 text-[0.56rem]">
@@ -62,9 +59,7 @@ const href = `/${getCategorySlug(d.category)}/${d.slug || post.id}`
                             </span>
                         )
                     }
-                    <span class="ledger text-ink/45 ml-auto text-xs"
-                        >{dayjs(d.pubDate).fromNow()}</span
-                    >
+                    <FormattedDate date={d.pubDate} class="ledger text-ink/45 ml-auto text-xs" />
                 </div>
                 <h3
                     class="font-heading text-ink group-hover:text-primary mt-2.5 text-lg leading-snug font-bold transition-colors"
